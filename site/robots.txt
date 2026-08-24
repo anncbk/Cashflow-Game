@@ -1,0 +1,7 @@
+# Unlisted page. Nothing here is meant to be crawled or indexed.
+# This is a request, not a control: it stops the search engines that honour
+# robots.txt, and nothing else. See DEPLOY.md.
+User-agent: *
+Disallow: /
+
+# no sitemap on purpose

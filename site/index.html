@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Investor's Roundtable</title>
+<!-- description and og copy are lifted verbatim from the page's own lines -->
+<meta name="description" content="Because the best way to think like an investor is to play like one.">
+<!-- Unlisted, not private. This keeps the page out of Google, Bing and the
+     Internet Archive so it is only found by someone you send the link to.
+     It does NOT stop anyone who has the link. See DEPLOY.md. -->
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, noimageindex">
+<meta name="referrer" content="no-referrer">
+<meta property="og:title" content="The Investor's Roundtable">
+<meta property="og:description" content="Because the best way to think like an investor is to play like one.">
+<meta property="og:image" content="images/14-og.jpg">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow+Semi+Condensed:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ══ INTERACTIVE CHROME (v3) ══
+     One fixed piece: the rail that reports how far down the page you are.
+     Inert under prefers-reduced-motion. Hover is left to the browser. -->
+<div class="prog" aria-hidden="true"><i></i></div>
+
+
+<!-- ══ NAV ══ -->
+<header class="nav">
+  <span class="nav__mark">The Investor&rsquo;s Roundtable</span>
+  <span class="nav__mid" id="countdown" aria-live="polite"></span>
+  <div class="nav__right">
+    <button class="iconbtn" id="soundBtn" aria-pressed="false" aria-label="Table sounds" title="Table sounds">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </button>
+    <a class="pill pill--white" href="#details"><span class="pill__in"><i>Ready to Play!</i><i>Ready to Play!</i></span></a>
+  </div>
+</header>
+
+<!-- ══ 1 · HERO — Figma Cover_Cashflow node 58:64 "banner" ══
+     The frame is 1920 × 1080. Every child below carries its Figma rect as a
+     percentage of that frame, so the composition is the Figma one at any
+     width instead of pixel-locking to 1920. Paint order is Figma's own:
+     note rain → centre pool → ivan → benny → floor band → violet bloom →
+     game box / die / price pills → the two head pools → title → subtitle →
+     logo. The two head pools sit ABOVE the figures on purpose: they are what
+     sinks the inner shoulders so the display type reads across them. -->
+<section class="hero" id="top" data-scrub="exit">
+  <div class="hero__stage">
+
+    <!-- 58:71 · the note rain, 15% and masked to fade out downward -->
+    <div class="hero__money" aria-hidden="true"></div>
+
+    <!-- 58:73 · Ellipse 9 — the small pool the game box stands over -->
+    <div class="pool pool--mid" aria-hidden="true"></div>
+
+    <!-- 58:74 / 58:75 · the two figures, each placed at its Figma rect.
+         The source PNGs are full-body cutouts in a 3072 × 4096 frame and the
+         Figma fill is a custom crop at scale 0.5024 — neither cover nor
+         contain reproduces it, and guessing put the figures ~20% too small.
+         So each node is exported on its own and used as the asset: the person
+         is then at the Figma's own crop by construction.
+         A node render arrives composited over the banner's ground, so the
+         ground is computed back out and subtracted to restore the alpha —
+         without that the plate is an opaque rectangle and hides the note rain
+         behind it. WebP because these are photographs with alpha: 121KB and
+         89KB, against 1.4MB and 1.1MB as PNG. -->
+    <img class="fig fig--ivan"  src="images/hero4/ivan.webp"  alt="" aria-hidden="true">
+    <img class="fig fig--benny" src="images/hero4/benny.webp" alt="" aria-hidden="true">
+
+    <!-- 58:76 · Rectangle 27 — the floor band the figures stand into -->
+    <div class="hero__floor" aria-hidden="true"></div>
+    <!-- 58:77 · Ellipse 11 — #761D7F at 60%, blur 100. The one violet on the
+         page, and it is a bloom behind the box, never a background. -->
+    <div class="hero__bloom" aria-hidden="true"></div>
+
+    <!-- 58:78 · Group 432 — the box, the die and the two price pills -->
+    <div class="offer">
+      <div class="offer__box" aria-hidden="true">
+        <img src="Assets/cashflow-3d-items-transparent/02-cashflow-game-box.png" alt="">
+      </div>
+      <img class="offer__die" src="Assets/cashflow-3d-items-transparent/05-dice-pair.png"
+           alt="" aria-hidden="true" data-spin="70">
+
+      <p class="price" style="--i:0">
+        <img class="price__ic" src="images/hero4/icon-1pax.svg" alt="" aria-hidden="true">
+        <span class="price__k">1 pax</span>
+        <b class="price__v">$15</b>
+      </p>
+      <p class="price price--two" style="--i:1">
+        <img class="price__ic" src="images/hero4/icon-2pax.svg" alt="" aria-hidden="true">
+        <span class="price__k">2 pax</span>
+        <b class="price__v">$25</b>
+      </p>
+    </div>
+
+    <!-- 58:101 / 58:100 · Ellipse 12 and Ellipse 10 -->
+    <div class="pool pool--l" aria-hidden="true"></div>
+    <div class="pool pool--r" aria-hidden="true"></div>
+
+    <!-- 58:102 · title. Three separate gradients, per the Figma. -->
+    <span class="sr-only">The Investor&rsquo;s Roundtable</span>
+    <h1 class="lockup" aria-hidden="true">
+      <!-- THE and INVE$TOR'S are one centred row, not two independently
+           placed lines. Placing them separately worked only while the webfont
+           was the exact face it was measured against: with the fallback in
+           play (a slow font load, or no network) the two ran into each other.
+           As one flex row with a real gap they can only re-centre. -->
+      <span class="lk lk--top">
+        <b class="lk__the">The</b><b class="lk__inv">Inve<i>$</i>tor&rsquo;s</b>
+      </span>
+      <span class="lk lk--rt">Roundtable</span>
+    </h1>
+
+    <!-- 58:107 · subtitle -->
+    <p class="hero__sub">Because the best way to think like an investor<br>is to play like one</p>
+
+    <!-- 58:108 · logo -->
+    <img class="hero__brand" src="images/hero4/crestbrick-logo.svg" alt="Crestbrick">
+  </div>
+
+  <div class="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
+</section>
+
+<!-- ══ 2 · MORE THAN JUST — Figma node 3:39 ══ -->
+<section class="sec night" id="game" data-scrub>
+  <img class="prop prop--n1" src="Assets/cashflow-3d-items-transparent/07-money-stacks.png" alt="" aria-hidden="true" data-depth="26">
+  <img class="prop prop--n2" src="Assets/cashflow-3d-items-transparent/01-yellow-sports-car.png" alt="" aria-hidden="true" data-depth="-22">
+
+  <div class="container night__head">
+    <img class="night__logo" src="images/hero2/cashflow-logo.svg" alt="Cashflow">
+    <span class="sr-only">More Than Just A Social Game Night</span>
+    <h2 class="stack" aria-hidden="true">
+      <span class="stack__line stack__a">More Than Just</span>
+      <span class="stack__line stack__b">A Social</span>
+      <span class="stack__line stack__b">Game Night</span>
+    </h2>
+  </div>
+
+  <div class="container grid night__body">
+    <figure class="night__shot" data-clip data-slot="board-photo" data-para="-40">
+      <img src="images/hero2/board-photo.jpg" alt="The Cashflow board mid-game on the table, score sheets around it.">
+      <img class="prop prop--n3" src="Assets/cashflow-3d-items-transparent/08-card-set.png" alt="" aria-hidden="true" data-depth="14">
+      <img class="prop prop--n4" src="Assets/cashflow-3d-items-transparent/06-pawn-set.png" alt="" aria-hidden="true" data-depth="-12">
+    </figure>
+
+    <div class="night__copy">
+      <p class="body body--lg" style="--i:0">Created by Robert Kiyosaki, author of Rich Dad Poor Dad, Cashflow is a financial simulation about one goal: <b class="hi">Getting out of the rat race.</b></p>
+      <p class="body body--lg" style="--i:1">To get there, you&rsquo;ll manage income, expenses, debt, opportunities, and unexpected life events, just like in real life.</p>
+      <p class="body body--lg" style="--i:2">You&rsquo;ll also see why property, when chosen and managed well, can be one of the most powerful assets in a wealth-building strategy.</p>
+      <p class="body body--lg" style="--i:3">It sounds simple. It&rsquo;s not. But that&rsquo;s what makes the learning so fun.</p>
+    </div>
+  </div>
+
+  <!-- the curved ribbon: Figma Vector 13 with its text-path, rebuilt as SVG -->
+  <div class="ribbon" aria-hidden="true">
+    <svg viewBox="0 0 1589.23 228.706" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ribbonBand" x1="679.782" y1="66.2075" x2="679.782" y2="187.708" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#222222"/><stop offset="1" stop-color="#141414"/>
+        </linearGradient>
+        <path id="ribbonPath" d="M30.2802 188.207C30.2802 188.207 262.611 13.7643 639.28 98.7075C1078.28 197.708 1365.78 166.708 1562.28 42.7075"/>
+      </defs>
+      <use href="#ribbonPath" stroke="url(#ribbonBand)" stroke-width="101" fill="none"/>
+      <text class="ribbon__t" dy="14">
+        <textPath href="#ribbonPath" startOffset="-45%">Getting out of the rat race &#8226; Getting out of the rat race &#8226; Getting out of the rat race &#8226; Getting out of the rat race &#8226;
+          <animate attributeName="startOffset" from="-45%" to="0%" dur="9s" repeatCount="indefinite"/>
+        </textPath>
+      </text>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ EDITORIAL PHOTO SHOWCASE ══ -->
+<section class="sec sec--showcase" id="together" data-scrub>
+  <img class="prop prop--v1" src="Assets/cashflow-3d-items-transparent/10-chip-stacks.png" alt="" aria-hidden="true" data-depth="24" data-spin="120">
+  <img class="prop prop--v2" src="Assets/cashflow-3d-items-transparent/06-pawn-set.png" alt="" aria-hidden="true" data-depth="-30">
+  <div class="wrap showcase__intro">
+    <p class="label">&#9642; Learn better</p>
+    <h2 class="h2 h2--ink" data-split>Learn Better,<br>Together.</h2>
+    <div class="cols">
+      <p class="lede lede--ink">Bring your partner, friend, sibling, or colleague along.</p>
+      <div class="cols__b">
+        <p class="body body--ink">It&rsquo;s a fun way to experience how money decisions work, compare choices, and see how investors think through risk, income, assets, and opportunities.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two crossed strips instead of a stacked collage: every photo keeps its
+       own frame, nothing overlaps, and the motion carries the interest.
+       Each strip holds the set three times over so the loop never shows a
+       gap, however wide the screen. -->
+  <div class="reel" id="showcase" data-rise>
+    <div class="reel__row reel__row--a">
+      <div class="reel__drift">
+        <div class="reel__track">
+          <!-- the set -->
+          <figure class="frame frame--wide" style="--i:0">
+            <img src="images/02-fan-left.jpg" alt="Players laughing together around the table." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:1">
+            <img src="images/05-tile-wide.jpg" alt="Players seated around the board working through their sheets." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:2">
+            <img src="images/09-loose-2.jpg" alt="A player smiling during the game." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:3">
+            <img src="images/07-tile-right.jpg" alt="Hands over the board, pieces and dice mid-play." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:4">
+            <img src="images/12-loose-5.jpg" alt="Players around the table mid-game." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:5">
+            <img src="images/03-fan-centre.jpg" alt="A group leaning in over the board mid-turn." loading="lazy" decoding="async">
+          </figure>
+          <!-- loop copy 1 -->
+          <figure class="frame frame--wide" style="--i:0" aria-hidden="true">
+            <img src="images/02-fan-left.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:1" aria-hidden="true">
+            <img src="images/05-tile-wide.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:2" aria-hidden="true">
+            <img src="images/09-loose-2.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:3" aria-hidden="true">
+            <img src="images/07-tile-right.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:4" aria-hidden="true">
+            <img src="images/12-loose-5.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:5" aria-hidden="true">
+            <img src="images/03-fan-centre.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <!-- loop copy 2 -->
+          <figure class="frame frame--wide" style="--i:0" aria-hidden="true">
+            <img src="images/02-fan-left.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:1" aria-hidden="true">
+            <img src="images/05-tile-wide.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:2" aria-hidden="true">
+            <img src="images/09-loose-2.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:3" aria-hidden="true">
+            <img src="images/07-tile-right.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:4" aria-hidden="true">
+            <img src="images/12-loose-5.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:5" aria-hidden="true">
+            <img src="images/03-fan-centre.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="reel__row reel__row--b">
+      <div class="reel__drift">
+        <div class="reel__track">
+          <!-- the set -->
+          <figure class="frame frame--wide" style="--i:0">
+            <img src="images/06-tile-mid.jpg" alt="A hand filling in a financial statement with a pen." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:1">
+            <img src="images/10-loose-3.jpg" alt="A player laughing while working out the numbers." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:2">
+            <img src="images/04-fan-right.jpg" alt="Players around the board comparing their sheets." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:3">
+            <img src="images/15-loose-6.jpg" alt="The table mid-game seen from above, boards and score sheets in play." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:4">
+            <img src="images/11-loose-4.jpg" alt="Players talking across the board." loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:5">
+            <img src="images/08-loose-1.jpg" alt="A table of players part-way through a round." loading="lazy" decoding="async">
+          </figure>
+          <!-- loop copy 1 -->
+          <figure class="frame frame--wide" style="--i:0" aria-hidden="true">
+            <img src="images/06-tile-mid.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:1" aria-hidden="true">
+            <img src="images/10-loose-3.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:2" aria-hidden="true">
+            <img src="images/04-fan-right.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:3" aria-hidden="true">
+            <img src="images/15-loose-6.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:4" aria-hidden="true">
+            <img src="images/11-loose-4.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:5" aria-hidden="true">
+            <img src="images/08-loose-1.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <!-- loop copy 2 -->
+          <figure class="frame frame--wide" style="--i:0" aria-hidden="true">
+            <img src="images/06-tile-mid.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:1" aria-hidden="true">
+            <img src="images/10-loose-3.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:2" aria-hidden="true">
+            <img src="images/04-fan-right.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--tall" style="--i:3" aria-hidden="true">
+            <img src="images/15-loose-6.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--wide" style="--i:4" aria-hidden="true">
+            <img src="images/11-loose-4.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+          <figure class="frame frame--sq" style="--i:5" aria-hidden="true">
+            <img src="images/08-loose-1.jpg" alt="" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ QUOTE ══ -->
+<section class="sec quote" id="word" data-scrub>
+  <div class="wrap">
+    <img class="prop prop--q" src="Assets/cashflow-3d-items-transparent/05-dice-pair.png" alt="" aria-hidden="true" data-depth="-20" data-spin="-90">
+    <blockquote class="quote__text" data-words>Cashflow game was game changing for my life. It reshaped my beliefs of how I should manage money making and investments.</blockquote>
+    <div class="byline">
+      <span class="byline__name">Ivan Cai</span>
+      <span class="byline__role">Crestbrick&rsquo;s Chairman</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EVENT DETAILS ══ -->
+<section class="sec details" id="details" data-scrub="in">
+  <figure class="slot details__bg" data-slot="13-details-bg"><img src="images/13-details-bg.jpg" alt="The full room, tables and players."></figure>
+  <div class="details__veil" aria-hidden="true"></div>
+  <img class="prop prop--d1" src="Assets/cashflow-3d-items-transparent/07-money-stacks.png" alt="" aria-hidden="true" data-depth="30">
+  <img class="prop prop--d2" src="Assets/cashflow-3d-items-transparent/03-mouse-financier.png" alt="" aria-hidden="true" data-depth="-26">
+
+  <div class="wrap details__inner">
+    <p class="label">&#9642; Event Details</p>
+    <h2 class="h2" data-split>The Investor&rsquo;s<br>Roundtable.</h2>
+    <p class="lede">Reserve your seat at the table.</p>
+
+    <div class="statgrid">
+      <div class="stat" style="--i:0"><span class="stat__k">Date</span><b>13 October 2026</b><i>(Tuesday)</i></div>
+      <div class="stat" style="--i:1"><span class="stat__k">Time</span><b>7:30 PM &ndash; 10:30 PM</b><i>Registration starts at 7:00 PM</i></div>
+      <div class="stat" style="--i:2"><span class="stat__k">Where</span><b>Suntec City Convention Centre</b><i>Level 3, Room 320</i></div>
+      <div class="stat" style="--i:3"><span class="stat__k">Entry</span><b>$15 / 1 pax &middot; $25 / 2 pax</b><i>Light refreshments provided</i></div>
+    </div>
+
+    <p class="sharp">Game starts at <b>7:30 PM sharp.</b></p>
+    <p class="fineprint">As the game will begin on time, latecomers may have to wait for the next round before joining in.</p>
+
+
+    <a class="pill pill--cta" href="#" id="cta"><span class="pill__in"><i>Ready to Play!</i><i>Ready to Play!</i></span></a>
+  </div>
+</section>
+
+<footer class="foot">
+  <p class="foot__a">For Investors, By Investors</p>
+  <p class="foot__b">&copy; 2026 The Investor&rsquo;s Roundtable</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

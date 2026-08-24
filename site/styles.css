@@ -1,0 +1,1004 @@
+/* ============================================================
+   The Investor's Roundtable
+   Layout and motion after inkgames.com.
+
+   Type: Manrope throughout, with weight and tracking doing the
+   display work while keeping body copy calm and readable.
+
+   Colour: sampled from the supplied 3D props in Assets/, so the
+   page and the objects on it share one palette. No violet
+   backgrounds; violet only survives inside the props themselves.
+   ============================================================ */
+
+:root{
+  --ink:     #0A0E11;   /* canvas */
+  --ink-2:   #14191E;   /* raised surfaces */
+  --bone:    #F2EFDC;   /* the light section, matches the prop bases */
+  --bone-2:  #E4DFC6;
+  --white:   #FAFBF7;
+  --grey:    #8C9299;
+  --lime:    #B0F216;   /* primary accent on dark */
+  --gold:    #F2C600;   /* the $, hover, seat map */
+  --coral:   #E8452C;   /* accent on the light section */
+  --cyan:    #58DCF2;
+  --violet:  #8442F2;   /* props only, never a background */
+
+  /* The banner (node 58:64) is Barlow Condensed for the title and Barlow Semi
+     Condensed for the price pills, and measuring the export confirms both: with
+     the Figma's -3.8975px tracking, Barlow Condensed puts ROUNDTABLE's ink at
+     854.5 against the reference's 851.7 and its B at 616.2 against 616.
+     The fallbacks are condensed on purpose. These sizes and offsets are cut for
+     a condensed face, and a stack that falls through to a normal-width system
+     font sets ~15% wider — which is exactly what made the title collide before
+     the pair was rebuilt as one centred line. Manrope still sets the page. */
+  --f-cond:  "Barlow Condensed", "Roboto Condensed", "Arial Narrow",
+             system-ui, sans-serif;
+  --f-cond2: "Barlow Semi Condensed", "Barlow Condensed", "Roboto Condensed",
+             "Arial Narrow", system-ui, sans-serif;
+  --f-disp: "Manrope", system-ui, sans-serif;
+  --f-body: "Manrope", system-ui, sans-serif;
+  --f-mono: "Manrope", ui-monospace, monospace;
+
+  --pad: clamp(18px, 4.4vw, 64px);
+  --maxw: 1320px;
+  --r: clamp(16px, 2.2vw, 30px);
+  --ease: cubic-bezier(.16,.84,.28,1);
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; background:var(--ink); }
+body{
+  margin:0; background:var(--ink); color:var(--white);
+  font-family:var(--f-body); font-size:17px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden; overflow-x:clip;
+}
+
+/* The Figma artwork is kept as independent DOM layers. This is important:
+   the characters, board, title and props all have their own motion rather
+   than being flattened into a screenshot. */
+.nav{ display:none !important; }
+img{ display:block; max-width:100%; }
+em{ font-style:italic; }
+
+/* ── one neutral grade over every photo, so mixed sources match ── */
+.slot{ position:relative; margin:0; overflow:hidden; }
+.slot img{
+  width:100%; height:100%; object-fit:contain;
+  background:#050505;
+  filter:brightness(1.02) contrast(1.04) saturate(1.02);
+}
+.slot::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(165deg, rgba(176,242,22,.05), rgba(10,14,17,.16));
+}
+.card{
+  border-radius:var(--r);
+  box-shadow:0 24px 60px rgba(0,0,0,.55);
+}
+
+/* ══════════ TYPE ══════════ */
+.h2{
+  font-family:var(--f-disp); font-weight:800; text-transform:uppercase;
+  font-size:clamp(2.3rem, 6.2vw, 5.6rem); line-height:.92; letter-spacing:-.055em;
+  margin:0 0 .4em; color:var(--white);
+}
+.h2--ink{ color:var(--white); }
+
+.label{
+  font-family:var(--f-mono); font-weight:700; font-size:.76rem; letter-spacing:.26em;
+  text-transform:uppercase; color:var(--lime); margin:0 0 1.5em;
+}
+.sec--bone .label{ color:var(--gold); }
+.lede{
+  font-size:clamp(1.1rem, 1.8vw, 1.45rem); line-height:1.36; color:var(--white);
+  margin:0; max-width:42ch; font-weight:600;
+}
+.lede--ink{ color:var(--white); font-weight:700; }
+.body{ color:var(--grey); margin:0 0 .85em; max-width:58ch; font-size:1.02rem; }
+.body:last-child{ margin-bottom:0; }
+.body--ink{ color:#b7b7b7; opacity:1; font-weight:400; }
+.fineprint{
+  font-family:var(--f-mono); font-size:.84rem; line-height:1.55; color:var(--grey);
+  max-width:64ch; margin:14px auto 0; letter-spacing:.01em;
+}
+
+/* ══════════ LAYOUT ══════════ */
+.wrap{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--pad); position:relative; }
+.sec{ position:relative; padding:clamp(76px,10vw,168px) 0; }
+.sec--tight{ padding-top:clamp(20px,3vw,48px); padding-bottom:clamp(30px,4vw,64px); }
+.cols{
+  display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px,4vw,72px);
+  margin-top:clamp(22px,3vw,44px);
+}
+.cols__b{ display:grid; gap:0; align-content:start; }
+
+/* ══════════ NAV ══════════ */
+.nav{
+  position:fixed; inset:0 0 auto; z-index:60;
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:14px clamp(14px,3.4vw,32px);
+  background:linear-gradient(180deg, rgba(10,14,17,.94), rgba(10,14,17,0));
+}
+.nav__mark{
+  font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
+  font-size:.92rem; letter-spacing:.05em;
+}
+.nav__mid{
+  font-family:var(--f-mono); font-weight:500; font-size:.78rem; letter-spacing:.18em;
+  color:var(--grey); white-space:nowrap;
+}
+.nav__right{ display:flex; align-items:center; gap:10px; }
+.iconbtn{
+  display:grid; place-items:center; width:36px; height:36px; cursor:pointer;
+  background:none; border:1px solid rgba(250,251,253,.2); border-radius:50%;
+  color:var(--grey); transition:.22s var(--ease);
+}
+.iconbtn:hover{ border-color:var(--white); color:var(--white); }
+.iconbtn[aria-pressed="true"]{ color:var(--lime); border-color:var(--lime); }
+.eq{ display:flex; align-items:flex-end; gap:2px; height:12px; }
+.eq i{ width:2px; height:3px; background:currentColor; border-radius:1px; }
+.iconbtn[aria-pressed="true"] .eq i{ animation:eq .9s ease-in-out infinite; }
+.iconbtn[aria-pressed="true"] .eq i:nth-child(2){ animation-delay:.15s }
+.iconbtn[aria-pressed="true"] .eq i:nth-child(3){ animation-delay:.3s }
+.iconbtn[aria-pressed="true"] .eq i:nth-child(4){ animation-delay:.45s }
+@keyframes eq{ 0%,100%{height:3px} 50%{height:12px} }
+
+.pill{
+  display:inline-flex; align-items:center; justify-content:center; text-decoration:none;
+  font-family:var(--f-mono); font-weight:700; font-size:.8rem; letter-spacing:.16em; text-transform:uppercase;
+  border-radius:99px; padding:11px 20px; white-space:nowrap; transition:.22s var(--ease);
+}
+.pill--white{ background:var(--white); color:var(--ink); }
+.pill--white:hover{ background:var(--lime); }
+.pill--cta{
+  background:var(--white); color:var(--ink);
+  font-size:clamp(.82rem,1.5vw,1rem); padding:20px 42px; letter-spacing:.1em;
+  margin-top:clamp(26px,4vw,44px);
+}
+.pill--cta:hover{ background:var(--lime); transform:translateY(-3px); }
+.pill--cta:active{ transform:translateY(1px); }
+
+/* ══════════ PROPS ══════════ */
+.prop{
+  position:absolute; pointer-events:none; z-index:2;
+  filter:drop-shadow(0 22px 34px rgba(0,0,0,.5));
+  will-change:transform;
+}
+.props{ position:absolute; inset:0; z-index:2; }
+/* bob keyframes now live in the MOTION block at the end of this file */
+
+.prop--v1{ width:clamp(72px,8vw,142px); top:5%; right:5%; }
+/* below the strips, not on them — it used to land on the first photo */
+.prop--v2{ width:clamp(60px,6.6vw,116px); bottom:8%; left:3%; }
+/* the red die replaced the gold bars here. The bars were wide and flat and
+   sat behind the opening words; a die is square and bright red, so at the same
+   rect it landed on top of "Cashflow". Pulled left of the measure and raised
+   clear of the first line. */
+.prop--q{ width:clamp(72px,7.2vw,128px); top:-46%; left:-5%; }
+.prop--d1{ width:clamp(78px,8.6vw,152px);  top:9%; left:5%; }
+.prop--d2{ width:clamp(80px,8.8vw,154px); bottom:13%; right:5%; }
+
+/* the 12-column container the Figma sections are laid out on */
+.container{ width:calc(100% - 40px); margin-inline:auto; position:relative; }
+.grid{ display:grid; grid-template-columns:repeat(12, 1fr); gap:20px; align-items:start; }
+
+/* ══ HERO — Figma Cover_Cashflow node 58:64 "banner" ══
+   The frame is 1920 × 1080. Every rule below is a Figma rect divided by that
+   frame, so the composition is the Figma one at any width. The px it came
+   from is noted after each rule, so a change in the file is one division away.
+
+   Two things are worth knowing before editing:
+   • The two head pools (.pool--l / .pool--r) paint OVER the figures. That is
+     Figma's own order and it is load-bearing — they are what sinks the inner
+     shoulders so ROUNDTABLE can cross them and still read.
+   • The figures are `object-fit:cover` in their frames. Figma scales an image
+     fill to cover and crops the overflow; matching that (rather than
+     stretching) is why the faces keep their proportions. The two PNGs are
+     pre-cropped to their alpha bounds and the rects below are the cropped
+     bounds after Figma's cover scale, so the two are equivalent. */
+.hero{
+  position:relative; background:#000;
+  padding-bottom:0;
+}
+.hero__stage{
+  position:relative; overflow:hidden;
+  aspect-ratio:1920 / 1080; min-height:420px;
+  /* the frame's own radial: black in the middle, a green-black at the corners */
+  background:radial-gradient(50% 50% at 50% 50%, #000000 0%, #040901 50%, #081201 100%);
+}
+
+/* 58:71 · the note rain. 15%, and masked by a white → transparent gradient
+   1139.44 tall inside a 1428.96 box, i.e. gone by 79.74% down. */
+.hero__money{
+  position:absolute; z-index:0; pointer-events:none;
+  left:0; top:-17.4074%; width:100%; height:132.3111%;   /* 0, -188, 1920 × 1428.96 */
+  background:url("images/hero4/money.webp") center center / cover no-repeat;
+  opacity:.15;
+  -webkit-mask-image:linear-gradient(180deg, #fff 0%, rgba(255,255,255,0) 79.74%);
+          mask-image:linear-gradient(180deg, #fff 0%, rgba(255,255,255,0) 79.74%);
+  will-change:transform;
+}
+
+/* the three dark pools. Ellipse 9 sits under the figures; Ellipse 12 and
+   Ellipse 10 sit over them. All three are black radials, not glows. */
+.pool{ position:absolute; pointer-events:none; }
+.pool--mid{                                              /* 58:73 · 412,376 348² */
+  z-index:1; left:21.4583%; top:34.8148%; width:18.125%; height:32.2222%;
+  opacity:.35;
+  background:radial-gradient(closest-side, #000 0%, rgba(0,0,0,0) 100%);
+}
+.pool--l,
+.pool--r{
+  z-index:5; top:24.3519%; width:14.1146%; height:41.2963%;   /* 271 × 446 at y263 */
+  opacity:.5;
+  background:radial-gradient(closest-side, #000 0%, rgba(0,0,0,0) 100%);
+}
+.pool--l{ left:21.5104%; }                               /* 58:101 · x413 */
+.pool--r{ left:62.6042%; }                               /* 58:100 · x1202 */
+
+/* 58:74 / 58:75 · the figures. Each plate is the node's own render at its own
+   aspect, so the rect below is the Figma rect verbatim and `fill` crops
+   nothing. Placing the node renders rather than hand-cutting the portraits is
+   what fixed the sizing: the underlying PNG is a 3072 × 4096 frame with the
+   person filling only 41% of its width, so any cutout-plus-cover guess landed
+   the figures ~20% too small. */
+.fig{
+  position:absolute; z-index:2; pointer-events:none;
+  object-fit:fill; max-width:none;
+}
+/* the plates are the frame rect exactly, so `fill` crops nothing */
+.fig--ivan{  left:2.1875%;  top:.6481%;  width:34.7396%; height:99.3519%; }  /* 42,7 667 × 1073 */
+.fig--benny{ left:67.3438%; top:4.3519%; width:30.1042%; height:95.6481%; }  /* 1293,47 578 × 1033 */
+
+/* 58:76 · Rectangle 27 — the floor the figures stand into */
+.hero__floor{
+  position:absolute; z-index:3; pointer-events:none;
+  left:0; top:60.1852%; width:100%; height:39.8148%;     /* 0,650 1920 × 430 */
+  background:linear-gradient(180deg, rgba(0,0,0,0) 0%, #000 100%);
+}
+/* 58:77 · Ellipse 11 — #761D7F at 60% under a 100px blur. Drawn as a radial
+   instead of a filter: a blur on a 1094-wide box costs a paint every frame
+   and the gradient is indistinguishable at this softness. */
+.hero__bloom{
+  position:absolute; z-index:3; pointer-events:none;
+  left:23.4375%; top:46.2963%; width:56.9792%; height:65.0926%;  /* blurred bounds */
+  background:radial-gradient(ellipse 34% 24% at 50% 50%,
+    rgba(118,29,127,.60) 0%, rgba(118,29,127,.40) 46%, rgba(118,29,127,0) 82%);
+}
+
+/* ══ 58:78 · Group 432 — the box, the die, the two price pills ══ */
+.offer{ position:absolute; z-index:4; inset:0; pointer-events:none; }
+.offer__box{                                             /* 58:79 · 708,653 403 × 377 */
+  position:absolute; left:36.875%; top:60.4630%;
+  width:20.9912%; height:34.9074%; overflow:hidden;
+}
+/* the box art is wider than its window: Figma crops it, so this does too */
+.offer__box img{
+  position:absolute; top:0; left:-20.49%; width:140.31%; height:100%;
+  max-width:none; object-fit:fill;
+}
+.offer__die{                                             /* 58:82 · 1060,903 101 × 115 */
+  position:absolute; left:55.2083%; top:83.6111%;
+  width:5.2604%; height:auto;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));
+}
+
+/* the two price pills. 266 × 72.27, radius 10.04, and a gradient that runs
+   UP from #458715 through #6BD41F at 42% to #D3FFB2. Everything inside is
+   placed as a % of the pill, so the pill scales as one piece. */
+.price{
+  position:absolute; z-index:5; margin:0;
+  left:55.2083%; width:13.8542%; height:6.6919%;         /* 1060 · 266 × 72.27 */
+  top:67.4565%;                                          /* 728.53 */
+  /* radius and inset shadow are in vw, not em: `em` would resolve against
+     this box's font-size, which is not the pill height, and the corner came
+     out 17px instead of 10. The phone block sets both again in px. */
+  border-radius:.5228vw;                                 /* 10.038 / 1920 */
+  background:linear-gradient(0deg, #458715 0%, #6BD41F 42.031%, #D3FFB2 100%);
+  box-shadow:inset 0 .0993vw .0993vw rgba(0,0,0,.4);     /* 1.907 / 1920 */
+  font-family:var(--f-cond2); color:#0B0B0B; line-height:1;
+}
+.price--two{ top:75.4019%; }                             /* 814.34 */
+.price__ic{
+  position:absolute; left:9.895%; top:50%; translate:0 -50%;
+  width:8.601%; height:auto;
+}
+.price--two .price__ic{ left:7.667%; width:11.236%; }    /* the two-person glyph is wider */
+.price__k{
+  position:absolute; left:23.286%; top:50%; translate:0 -50%;
+  font-size:1.3734vw; font-weight:700; letter-spacing:.005em;
+  text-transform:uppercase; line-height:1;
+}
+.price__v{
+  position:absolute; left:58.060%; top:50%; translate:0 -50%;
+  font-size:3.1461vw; font-weight:700; line-height:1; letter-spacing:-.01em;
+}
+/* Vector 8 — the hairline between the label and the price */
+.price::after{
+  content:''; position:absolute; left:51.729%; top:50%; translate:0 -50%;
+  width:1.525px; height:57.51%; background:#0B0B0B;
+}
+
+/* ══ 58:102 · the title ══
+   Three runs, three gradients, each on its own rect. Barlow Condensed Bold
+   is the Figma face; sizes are the raw Figma px over 1920 so they hold at
+   any width. */
+.lockup{
+  position:absolute; z-index:6; inset:0; margin:0; pointer-events:none;
+  font-family:var(--f-cond); font-weight:700; text-transform:uppercase;
+  text-align:center;
+  -webkit-text-fill-color:transparent;
+}
+.lk{
+  position:absolute; left:0; right:0; display:block;
+  -webkit-background-clip:text; background-clip:text;
+}
+.lk i{ font-style:normal; }
+/* A note on the leading, because it is the one non-obvious thing here.
+   Figma sets these three lines *tighter than their own glyphs*: ROUNDTABLE is
+   194.87px on 114.93px leading. `background-clip:text` paints the element's
+   background box, so a line box shorter than the letters clips the gradient
+   and the bottom of every glyph simply vanishes. So each line is given a
+   generous 1.5em line box, pulled back up by half the difference so the
+   letters land where Figma put them, and the gradient stops are remapped into
+   the middle of that taller box — which leaves the end colours running past
+   the band exactly as Figma's fill does. Figma leading and stops are noted
+   after each rule so the arithmetic can be checked. */
+/* THE and INVE$TOR'S are one row. The Figma places them as two separate text
+   nodes centred on x549.24 and x1009.25, and that is what this used to do — but
+   two independently placed lines only clear each other while the face is the
+   exact one they were measured against. Under the fallback (slow font load, or
+   no network) system-ui sets 15% wider and the two collided. As a baseline-
+   aligned flex row with a real gap the pair just re-centres instead. */
+.lk--top{
+  top:calc(18.5185% - .29775em);                         /* 58:105 · y200 */
+  font-size:10.1499vw; line-height:1.5;                  /* also the em base above */
+  translate:-.9731% 0;                                   /* pair ink centre, x942 */
+  white-space:nowrap;
+}
+/* The two runs are INLINE, so the browser lays them out with real advances on
+   one baseline and `text-align:center` centres the pair as a unit. Flex was
+   tried first: it centres the item *boxes*, and an item box is wider than its
+   ink by the side bearings, which pushed THE 80px off its Figma centre. */
+.lk__the,
+.lk__inv{
+  display:inline; font-weight:700;
+  /* per run, because an `em` tracking resolves against the size of the element
+     it is declared on. On the parent it inherits as a LENGTH and over-tracks
+     the smaller run — THE came out 6% narrow. */
+  letter-spacing:-.02em;
+  -webkit-background-clip:text; background-clip:text;
+}
+.lk__the{                                                /* 58:106 · lead 94.5 */
+  font-size:.4588em;                                     /* 89.409 / 194.878 */
+  background-image:linear-gradient(180deg,
+    #FFFFFF 14.769%, #DBC9AC 85.231%);                   /* 0% → 100% */
+}
+.lk__inv{                                                /* 58:105 · lead 176.27 */
+  font-size:1em; margin-left:.0798em;                    /* the Figma ink gap, 25.25 */
+  background-image:linear-gradient(180deg,
+    #FFFFFF 31.054%, #B2FF88 53.769%, #6BD41F 76.487%);  /* 18.577 / 56.249 / 93.922 */
+}
+.lk--rt{                                   /* 58:103 · top 385.4, centre 969.83, lead 114.93 */
+  top:calc(35.6852% - .45512em); translate:.3193% 0;
+  font-size:10.1496vw; line-height:1.5; letter-spacing:-.02em;
+  background-image:linear-gradient(180deg,
+    #FFFFFF 30.341%, #FBC11F 69.659%);                   /* 0% → 100% */
+}
+
+/* 58:107 · the subtitle. This is the page's own tagline, so the loose
+   three-part version that used to sit at the hero foot in v3 is gone —
+   it would have said the same sentence twice. */
+.hero__sub{
+  position:absolute; z-index:6; left:0; right:0; top:50.4028%;   /* 544.35 */
+  margin:0; text-align:center;
+  font-family:var(--f-body); font-weight:700;
+  font-size:1.7644vw; line-height:1.2647;                        /* 33.88 / 42.85 */
+  color:rgba(255,255,255,.85);
+  pointer-events:none;
+}
+
+/* 58:108 · the logo. It is centre-top in this node, so unlike v1–v3 it is
+   on the page: the banner is Crestbrick's own cover art. */
+.hero__brand{
+  position:absolute; z-index:7; left:43.0538%; top:5.9259%;      /* 826.63, 64 */
+  width:13.9266%; height:auto;                                    /* 267.39 */
+  pointer-events:none;
+}
+
+
+/* ══ MORE THAN JUST — Figma node 3:39 ══
+   Frame 1440 x 1515, black. Same approach: fixed composition in %. */
+.night{
+  position:relative; background:#000; overflow:hidden;
+  aspect-ratio:1440 / 1515; min-height:640px;
+  padding:0;
+}
+.night__head{ position:absolute; z-index:3; left:0; right:0; top:0; height:100%; }
+.night__logo{                                             /* x528 y54 384x135 */
+  position:absolute; left:36.67%; top:3.56%; width:26.68%; height:auto;
+}
+.stack{                                                   /* y149, 797 wide, centred */
+  position:absolute; left:50%; transform:translateX(-50%); top:13.2%;
+  width:68%; margin:0; text-align:center;
+  font-family:var(--f-disp); font-weight:800; text-transform:uppercase;
+  letter-spacing:-.07em; line-height:.91;
+  color:#fff;
+}
+.stack__line{ display:block; }
+.stack__a{
+  display:block; font-size:5.7vw; font-weight:600;
+  color:#fff; -webkit-text-fill-color:#fff;
+}
+.stack__b{
+  display:block; font-size:7.8vw;
+  color:#FBC11F; -webkit-text-fill-color:#FBC11F;
+  background:none;
+}
+
+.night__body{ position:absolute; z-index:3; left:0; right:0; top:0; height:100%; }
+.night__shot{
+  position:absolute; left:15.1%; top:42.6%; width:34.2%;
+  aspect-ratio:580.3 / 467.2; margin:0;
+  border-radius:4%; overflow:visible; transform:none;
+}
+.night__shot > img:first-child{
+  width:100%; height:100%; object-fit:contain; background:#050505; border-radius:4%;
+  box-shadow:0 26px 60px rgba(0,0,0,.6);
+}
+.night__copy{
+  position:absolute; left:52.6%; top:43.0%; width:33.8%;
+}
+.body--lg{ font-size:1.62vw; line-height:1.34; color:#fff; margin:0 0 .68em; }
+.body--lg:last-child{ margin-bottom:0; }
+.hi{
+  font-weight:700;
+  background-image:linear-gradient(90deg, #FFF1C9 0%, #FFCC3C 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+/* the loose items around this section */
+/* Only the eight approved elements appear from here down: the car, the game
+   box, the mouse, the red die, the blue pawn, the white die, the blue die and
+   the orange chips. The two ChatGPT rat renders and the gold bars are gone, so
+   the widths and tilts below are retuned to the objects that replaced them —
+   a car wants width and almost no rotation; a pawn wants neither. */
+.prop--n1{ left:auto; right:2%; top:18.4%; width:13.4%; --spin:29.63deg; }   /* white die */
+.prop--n2{ left:1.5%; top:26%; width:19.4%; --spin:-6deg;                    /* the car */
+  filter:drop-shadow(0 26px 38px rgba(0,0,0,.55)); }
+.prop--n3{ position:absolute; left:70%; top:76%; width:13%; z-index:4; --spin:20deg; }  /* blue die */
+.prop--n4{ position:absolute; left:88%; top:66%; width:16%; z-index:4;       /* blue pawn */
+  filter:drop-shadow(0 16px 22px rgba(0,0,0,.5)); }
+
+/* Vector 13 plus its text-path — x-56.5 y1260, 1532 x 145.5 */
+.ribbon{
+  position:absolute; z-index:5; left:-3.92%; top:83.17%; width:106.39%;
+  aspect-ratio:1589.23 / 228.706; pointer-events:none;
+}
+.ribbon svg{ width:100%; height:100%; overflow:visible; }
+.ribbon svg{ animation:ribbonDrift 8s ease-in-out infinite; transform-origin:center; }
+@keyframes ribbonDrift{0%,100%{transform:translateX(0) rotate(0)}50%{transform:translateX(-1.2%) rotate(-.35deg)}}
+.ribbon__t{
+  font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
+  font-size:58px; letter-spacing:.02em; fill:#FBC11F;
+}
+
+/* The remaining page now follows the same black / white / gold system as
+   the two Figma-led opening sections. */
+.sec--showcase,
+.quote,
+.details{
+  background:#000;
+}
+.sec--showcase{ overflow:hidden; padding-bottom:clamp(92px,11vw,170px); }
+.sec--showcase::before{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(circle at 78% 20%,rgba(251,193,31,.08),transparent 30%),
+    radial-gradient(circle at 18% 72%,rgba(132,66,242,.06),transparent 28%);
+}
+.sec--showcase .label{ color:var(--gold); }
+.sec--showcase .slot::after{ background:linear-gradient(160deg,rgba(251,193,31,.03),rgba(0,0,0,.08)); }
+
+/* ══════════ EDITORIAL PHOTO SHOWCASE — THE TWO STRIPS ══════════
+   The old version stacked nine cards on a 12-column grid and floated three
+   rotated cards on top of them. Too many competing edges. This replaces it
+   with two counter-drifting strips, tilted so they cross like a dealt hand:
+   uniform frames, no overlap, and all of the interest carried by motion.
+
+   Motion in play here
+     · each strip loops continuously, the two in opposite directions
+     · scroll velocity pushes and skews the strips, then they settle back
+     · frames deal in on enter, staggered along the strip
+     · hover holds both strips, lifts one frame and dims the rest
+     · a gold spark travels the hairline between the strips
+   ══════════════════════════════════════════════════════════════ */
+.showcase__intro{ position:relative; z-index:2; }
+
+.reel{
+  --h:      clamp(148px, 17vw, 262px);   /* frame height, strip A */
+  --gap:    clamp(10px, 1.1vw, 18px);
+  --loop:   46s;                          /* one full pass of a strip */
+  position:relative; z-index:2; isolation:isolate;
+  margin-top:clamp(52px, 6.6vw, 104px);
+  display:grid; gap:clamp(14px, 1.7vw, 28px);
+}
+
+/* Each strip masks itself at both ends, so frames arrive out of the black
+   instead of being cut off by a hard edge. The tilt is on the strip, never
+   on the individual frames — one angle reads as intent, nine read as noise. */
+.reel__row{
+  position:relative; overflow:hidden;
+  width:114%; margin-left:-7%;
+  padding-block:clamp(6px, .9vw, 14px);
+  /* the strip is wider than the page and pulled left, so the fade stops are
+     set where the viewport edges actually fall, not at the strip's own ends */
+  -webkit-mask-image:linear-gradient(90deg, transparent 4%, #000 22%, #000 78%, transparent 96%);
+          mask-image:linear-gradient(90deg, transparent 4%, #000 22%, #000 78%, transparent 96%);
+}
+.reel__row--a{ transform:rotate(-1.15deg); }
+.reel__row--b{ transform:rotate(1.15deg); --h:calc(clamp(148px, 17vw, 262px) * .8); }
+
+/* velocity layer (JS) is kept off the animated layer so the two never fight */
+.reel__drift{
+  transform:translate3d(var(--vx, 0px), 0, 0) skewX(var(--sk, 0deg));
+  will-change:transform;
+}
+.reel__track{
+  display:flex; align-items:center; gap:var(--gap); width:max-content;
+  animation:reelRun var(--loop) linear infinite;
+  will-change:transform;
+}
+.reel__row--b .reel__track{ animation-direction:reverse; animation-duration:calc(var(--loop) * 1.18); }
+/* three copies of the set sit in the track; one copy-width of travel is
+   (track / 3) + (gap / 3), which lands copy 2 exactly where copy 1 began */
+@keyframes reelRun{
+  from{ transform:translate3d(0,0,0); }
+  to  { transform:translate3d(calc(-100% / 3 - var(--gap) / 3), 0, 0); }
+}
+/* hover holds the whole table still, so the photo you are looking at stops */
+.reel.is-held .reel__track,
+.reel.is-held .frame{ animation-play-state:paused; }
+
+/* ── the frame ── */
+.frame{
+  position:relative; margin:0; flex:0 0 auto;
+  height:var(--h); aspect-ratio:3 / 2;
+  overflow:hidden; border-radius:clamp(10px, 1.1vw, 16px);
+  background:#050505;
+  box-shadow:0 18px 44px rgba(0,0,0,.6);
+  transition:transform .7s var(--ease), box-shadow .5s var(--ease), opacity .5s var(--ease), filter .5s var(--ease);
+}
+.frame--tall{ aspect-ratio:4 / 5; }
+.frame--sq{   aspect-ratio:1 / 1; }
+.frame img{
+  width:100%; height:100%; object-fit:cover;
+  transform:scale(1.02);
+  transition:transform 1.3s var(--ease), filter .5s var(--ease);
+  filter:brightness(.94) saturate(.96);
+}
+/* a hairline and a soft top light, so a frame still reads against pure black */
+.frame::before{
+  content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
+  border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);
+  background:linear-gradient(168deg, rgba(251,193,31,.05), transparent 42%);
+  transition:box-shadow .45s var(--ease), background .45s var(--ease);
+}
+/* ── deal-in on enter: frames arrive along the strip ── */
+.reel[data-rise]{ opacity:1; transform:none; }        /* the frames animate, not the block */
+.reel .frame{
+  opacity:0; transform:translateY(30px) scale(.94);
+  transition:opacity .9s var(--ease), transform 1s var(--ease);
+  transition-delay:calc(var(--i, 0) * .075s);
+}
+.reel.in .frame{
+  opacity:1; transform:none;
+  /* `translate` is a separate property from `transform`, so this breathing
+     rides along with the reveal and the hover lift rather than fighting them */
+  animation:frameFloat 9s ease-in-out infinite;
+  animation-delay:calc(var(--i, 0) * -1.4s);
+}
+.reel.in .reel__row--b .frame{ animation-direction:reverse; animation-duration:10.5s; }
+@keyframes frameFloat{
+  0%,100%{ translate:0 0; }
+  50%    { translate:0 -6px; }
+}
+
+/* ── hover: hold the strips, bring one frame forward ── */
+@media (hover:hover){
+  .reel.in .frame:hover{
+    transform:translateY(-6px) scale(1.035);
+    box-shadow:0 30px 70px rgba(0,0,0,.78);
+    transition-delay:0s;
+  }
+  .reel.in .frame:hover img{ transform:scale(1.13); filter:brightness(1.06) saturate(1.06); }
+  .reel.in .frame:hover::before{
+    box-shadow:inset 0 0 0 1px rgba(251,193,31,.62), 0 0 26px rgba(251,193,31,.13);
+    background:linear-gradient(168deg, rgba(251,193,31,.12), transparent 55%);
+  }
+  .reel.in:has(.frame:hover) .frame:not(:hover){
+    opacity:.34; filter:saturate(.35) brightness(.8); transition-delay:0s;
+  }
+}
+
+/* ══════════ QUOTE ══════════ */
+.quote{ padding-top:clamp(36px,4.5vw,74px); padding-bottom:clamp(56px,7vw,120px); }
+.quote .wrap{ max-width:1020px; text-align:center; }
+.quote__text{
+  font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
+  font-size:clamp(1.4rem,3.6vw,2.9rem); line-height:1.02; letter-spacing:.004em;
+  margin:0 0 30px; color:var(--white);
+}
+.byline{ display:inline-grid; gap:3px; }
+.byline__name{ font-family:var(--f-disp); font-weight:900; text-transform:uppercase; font-size:1.05rem; letter-spacing:.06em; color:var(--gold); }
+.byline__role{ font-family:var(--f-mono); font-size:.74rem; letter-spacing:.22em; text-transform:uppercase; color:var(--grey); }
+
+/* ══════════ DETAILS ══════════ */
+.details{ overflow:hidden; text-align:center; }
+.details__bg{ position:absolute; inset:0; }
+.details__bg img{ object-fit:contain; background:#000; filter:brightness(.52) contrast(1.06) saturate(.8); }
+.details__bg::after{ background:linear-gradient(160deg, rgba(10,14,17,.18), rgba(10,14,17,.42)); }
+.details__veil{
+  position:absolute; inset:0;
+  background:radial-gradient(76% 66% at 50% 46%, rgba(10,14,17,.56), rgba(10,14,17,.90) 80%);
+}
+.details__inner{ z-index:4 }
+.details .lede{ margin-inline:auto }
+.statgrid{
+  display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(10px,1.4vw,16px);
+  max-width:880px; margin:clamp(34px,5vw,58px) auto clamp(26px,3.4vw,38px); text-align:left;
+}
+.stat{
+  border:1px solid rgba(250,251,253,.16); border-radius:calc(var(--r) * .7);
+  padding:clamp(16px,2.2vw,24px); background:rgba(250,251,253,.03);
+  display:grid; gap:4px; transition:.3s var(--ease);
+}
+.stat:hover{ border-color:rgba(176,242,22,.6); background:rgba(176,242,22,.06) }
+.stat__k{ font-family:var(--f-mono); font-weight:700; font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; color:var(--lime); }
+.stat b{
+  font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
+  font-size:clamp(.98rem,1.7vw,1.22rem); line-height:1.08; letter-spacing:.01em;
+}
+.stat i{ font-family:var(--f-mono); font-style:normal; font-size:.82rem; color:var(--grey); }
+.sharp{
+  display:inline-block; margin:0; border:1px solid rgba(242,198,0,.5); border-radius:99px;
+  padding:12px 24px; font-size:1.05rem; color:var(--white);
+}
+.sharp b{ color:var(--gold) }
+/* ══════════ FOOTER ══════════ */
+.foot{ text-align:center; padding:48px var(--pad) 56px; }
+.foot__a{
+  font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
+  font-size:1rem; letter-spacing:.14em; margin:0 0 8px;
+}
+.foot__b{ font-family:var(--f-mono); font-size:.78rem; letter-spacing:.1em; color:var(--grey); margin:0 }
+
+/* ══════════ REVEAL ══════════ */
+[data-rise]{ opacity:0; transform:translateY(24px); transition:opacity .8s var(--ease), transform .8s var(--ease) }
+[data-rise].in{ opacity:1; transform:none }
+
+/* ══════════ RESPONSIVE ══════════ */
+@media (max-width:1000px){
+  .cols{ grid-template-columns:1fr; gap:20px }
+  .lede{ max-width:none }
+}
+@media (max-width:760px){
+  body{ font-size:16px }
+  .nav__mid{ display:none }
+  .nav__mark{ font-size:.68rem }
+  /* ── hero at phone width ──
+     A 1920 × 1080 banner cannot hold at 375px: the type would be 40px tall
+     and the figures 60px wide. So the stage becomes a portrait box and the
+     banner is re-stacked in bands — logo, title, subtitle, the offer, then the
+     two figures standing on the floor. Same DOM, same eight parts.
+     The figures keep their own aspect here (height:auto) so the whole plate
+     shows head to hip; that also fixes the thing worth remembering, which is
+     that the offer group and the faces want the same band, and the faces lose
+     if you let them share it. */
+  .hero__stage{
+    width:100%; min-width:0; height:clamp(640px, 172vw, 800px);
+    aspect-ratio:auto;
+  }
+  .hero__brand{ left:50%; translate:-50% 0; top:3%; width:40%; }
+  .lk{ translate:0 0 !important; }
+  /* the pair stacks here, so the row becomes a block. line-height stays 1.5:
+     the gradient stops are remapped for that box, and changing it would slide
+     the colour band off the letters. */
+  .lk--top{ top:8.5%; font-size:15.6vw; }
+  .lk__the,
+  .lk__inv{ display:block; }                             /* stack the pair */
+  .lk__the{ font-size:.5769em; }                         /* 9vw of 15.6vw */
+  .lk__inv{ margin-left:0; margin-top:-9.6vw; }          /* close the stack up */
+  /* ROUNDTABLE sits under the stacked pair, so its top tracks the pair's
+     height — not the desktop 35.7%. At 23.5% it left a 35px hole under
+     INVE$TOR'S once the pair became one flowing block. */
+  .lk--rt { top:19.3%; font-size:13.8vw; line-height:1.5; }
+  .hero__sub{ top:31.5%; font-size:3.6vw; line-height:1.3; padding-inline:6%; }
+  /* the offer group: box left, pills right, die between them */
+  .offer__box{ left:2%;  top:40%; width:50%; height:18%; }
+  /* between the box and the pills, not behind them — at left:43% its right
+     corner disappeared under the second pill and read as a clipped shape */
+  .offer__die{ left:40%; top:46.5%; width:11%; }
+  .price{
+    left:54%; width:44%; height:7%; top:40.5%;
+    border-radius:6px; box-shadow:inset 0 2px 2px rgba(0,0,0,.4);
+  }
+  .price--two{ top:49%; }
+  .price__k{ font-size:4vw; }
+  .price__v{ font-size:9vw; }
+  /* The two figures stand on the floor band, and their widths are set from
+     their own plate ratios rather than by eye — benny's plate is 1.787 tall
+     for its width against ivan's 1.609, so an equal width puts his head 8%
+     higher and straight under the second price pill. */
+  .fig--ivan{  left:-6%;  top:auto; bottom:0; width:46%; height:auto; }
+  .fig--benny{ left:auto; right:-8%; top:auto; bottom:0; width:42%; height:auto; }
+  .hero__floor{ top:53%; height:47%; }
+  /* the pools were cut for a wide frame; on a tall one they read as smudges */
+  .pool--l{ left:2%;  top:9%;  width:48%; height:26%; }
+  .pool--r{ left:50%; top:9%;  width:48%; height:26%; }
+  .pool--mid{ left:14%; top:40%; width:72%; height:24%; }
+  .hero__bloom{ left:2%; top:40%; width:96%; height:28%; }
+  .hero{ padding-bottom:0; }
+  .night{ width:100%; min-width:0; aspect-ratio:auto; height:1350px; }
+  .night__logo{ left:50%; top:4%; width:43%; transform:translateX(-50%); }
+  .stack{ top:13%; width:94%; }
+  .stack__a{ font-size:8vw; }
+  .stack__b{ font-size:9.4vw; }
+  .night__shot{ left:8%; top:38%; width:84%; }
+  .night__copy{ left:9%; top:63%; width:82%; }
+  .body--lg{ font-size:4vw; line-height:1.25; }
+  .prop--n1{ left:auto; right:3%; top:24%; width:18%; }
+  .prop--n2{ left:2%; top:31%; width:34%; }          /* the car needs the width */
+  .prop--n4{ left:auto; right:2%; top:72%; width:11%; }
+  .ribbon{ top:92%; }
+  /* phone: the strips stay, just shorter and straighter */
+  .reel{ --h:clamp(122px,34vw,190px); --gap:8px; --loop:34s; margin-top:38px; }
+  .reel__row--a{ transform:rotate(-.7deg); }
+  .reel__row--b{ transform:rotate(.7deg); --h:calc(clamp(122px,34vw,190px) * .84); }
+  .reel .frame{ border-radius:10px; }
+  .statgrid{ grid-template-columns:1fr }
+}
+@media (prefers-reduced-motion:reduce){
+  *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important }
+  html{ scroll-behavior:auto }
+}
+
+/* ════════════════════════════════════════════════════════════
+   MOTION — after inkgames.com
+   The reference runs Lenis (smooth scroll) + GSAP + Three.js.
+   Everything below is hand-rolled to the same behaviour so the
+   page stays dependency-free and works offline.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── split-text: one masked block per line, inner span slides up ── */
+/* held back until the lines have been measured in the real face, so the
+   unsplit version never flashes on first paint */
+[data-split]{ visibility:hidden; }
+[data-split].ready{ visibility:visible; }
+.split{ display:block; }
+.split__line{ display:block; overflow:hidden; padding-bottom:.04em; margin-bottom:-.04em; }
+.split__line > span{
+  display:block;
+  transform:translateY(112%);
+  transition:transform 1s cubic-bezier(.16,.84,.28,1);
+  transition-delay:var(--d, 0s);
+  will-change:transform;
+}
+.in .split__line > span, .split.in .split__line > span{ transform:none; }
+
+/* the wordmark keeps its gold $ markup, so it masks as a single line */
+[data-reveal="mask"]{ overflow:hidden; padding-bottom:.06em; }
+[data-reveal="mask"] > .maskwrap{
+  display:block; transform:translateY(106%);
+  transition:transform 1.15s cubic-bezier(.16,.84,.28,1);
+  will-change:transform;
+}
+[data-reveal="mask"].in > .maskwrap{ transform:none; }
+
+/* screen readers get the unbroken sentence, same trick as the reference */
+.sr-only{
+  position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0;
+}
+
+/* Media now reveals with opacity/position only: no clip-path and no scale,
+   so the complete photo remains visible throughout the animation. */
+[data-clip] img{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .85s cubic-bezier(.16,.84,.28,1),
+             transform 1s cubic-bezier(.16,.84,.28,1);
+}
+[data-clip]::after{ opacity:0; transition:opacity .9s cubic-bezier(.16,.84,.28,1); }
+[data-clip].in img{ opacity:1; transform:none; }
+[data-clip].in::after{ opacity:1; }
+
+/* ── pill label swap on hover ── */
+.pill__in{ display:grid; overflow:hidden; }
+.pill__in i{
+  font-style:normal; grid-area:1/1; display:block;
+  transition:transform .5s cubic-bezier(.16,.84,.28,1);
+}
+.pill__in i:nth-child(2){ transform:translateY(115%); }
+.pill:hover .pill__in i:nth-child(1){ transform:translateY(-115%); }
+.pill:hover .pill__in i:nth-child(2){ transform:translateY(0); }
+
+/* ── props: bob + scroll depth + scroll-driven spin ── */
+.prop,
+.offer__die{
+  transform:translate3d(var(--mx,0px), var(--py,0px), 0) rotate(var(--spin,0deg));
+}
+.prop--bob{ animation:bob var(--bobdur,8s) ease-in-out infinite; }
+/* dice get the extra two axes, so a scroll rolls them instead of
+   sliding them round flat */
+@keyframes bob{
+  0%,100%{ transform:translate3d(var(--mx,0px), var(--py,0px), 0) rotate(var(--spin,0deg)) }
+  50%    { transform:translate3d(var(--mx,0px), calc(var(--py,0px) - 16px), 0) rotate(calc(var(--spin,0deg) + 5deg)) }
+}
+
+/* ── hero card recedes as you leave it ── */
+
+
+/* ── smooth-scroll host: kill native snap fighting ── */
+html.smooth{ scroll-behavior:auto; }
+
+/* ════════════════════════════════════════════════════════════
+   v3 — SEAMLESS INTERACTION LAYER
+
+   The v1 page revealed things: an element crossed a threshold and
+   played a transition. This version scrubs them instead. app.js writes
+   one number per section — `--p`, 0 when the section's top reaches the
+   bottom of the viewport, 1 when its bottom clears the top — and the
+   rules below read that number. Nothing waits for a threshold, so the
+   whole page tracks the scrollbar continuously.
+
+   The recurring trick is a clamped local progress:
+
+     --k: clamp(0, calc(var(--p) * SPEED - var(--i) * STAGGER), 1)
+
+   `--i` is the element's index, so each one starts a little later than
+   the last, and clamp() keeps the result inside 0..1 without any JS.
+
+   Note which way each fallback points. Rules that bring content IN read
+   `var(--p, 1)`, so if app.js never runs the text and cards are simply
+   there. Rules that take the hero OUT read `var(--p, 0)`, which is the
+   hero intact. Nothing on this page is hidden by a script that failed.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── 1. the scroll rail across the top (the only fixed chrome) ── */
+.prog{
+  position:fixed; z-index:60; left:0; right:0; top:0; height:2px;
+  background:rgba(255,255,255,.07); pointer-events:none;
+}
+.prog i{
+  display:block; height:100%; width:100%; transform-origin:0 50%;
+  transform:scaleX(var(--sp, 0));
+  background:linear-gradient(90deg, #FBC11F, #FFE47A 60%, #FBC11F);
+  box-shadow:0 0 14px rgba(251,193,31,.5);
+}
+
+/* ── 4. hero: the scroll cue, faded out by the hero's own progress ── */
+.cue{
+  /* bottom-left, clear of the game box that sits centre-stage */
+  position:absolute; z-index:8; left:var(--pad); bottom:clamp(84px,9vw,132px);
+  display:grid; justify-items:start; gap:8px;
+  font-family:var(--f-mono); font-size:.58rem; letter-spacing:.3em;
+  text-transform:uppercase; color:rgba(255,255,255,.6);
+  opacity:clamp(0, calc(1 - var(--p, 0) * 7), 1);
+  pointer-events:none;
+}
+.cue i{
+  width:1px; height:clamp(26px,3vw,44px);
+  background:linear-gradient(180deg, rgba(251,193,31,.9), transparent);
+  animation:cueDrop 1.9s cubic-bezier(.5,0,.5,1) infinite;
+  transform-origin:50% 0;
+}
+@keyframes cueDrop{
+  0%   { transform:scaleY(0);   opacity:0; }
+  35%  { transform:scaleY(1);   opacity:1; }
+  100% { transform:scaleY(1) translateY(100%); opacity:0; }
+}
+
+/* ── 5. hero layers, now scrubbed rather than nudged ──
+   Each layer leaves at its own rate, so the hero comes apart as you go
+   instead of sliding away as one flat picture. */
+.hero__money{ translate:0 calc(var(--p, 0) * -90px); }
+.fig{
+  translate:var(--fx, 0px) calc(var(--p, 0) * 74px + var(--fy, 0px));
+  scale:calc(1 + var(--p, 0) * .045);
+  transition:translate .5s var(--ease);
+}
+/* the title carries a horizontal offset of its own, so the exit is written
+   into the second value and the first is kept per-line */
+.lk--top{ translate:-.9731% calc(var(--p, 0) * -54px); }
+.lk--rt { translate:.3193%  calc(var(--p, 0) * -54px); }
+.lockup{ opacity:clamp(0, calc(1 - var(--p, 0) * 1.5), 1); }
+.hero__sub{
+  translate:0 calc(var(--p, 0) * -30px);
+  opacity:clamp(0, calc(1 - var(--p, 0) * 2.1), 1);
+}
+.offer{
+  translate:var(--ox, 0px) calc(var(--p, 0) * 40px + var(--oy, 0px));
+  transition:translate .5s var(--ease);
+}
+.hero__brand{ opacity:clamp(0, calc(1 - var(--p, 0) * 3), 1); }
+
+/* ── 6. the game-night section ── */
+/* the photo drifts against the page, driven by app.js's data-para */
+.night__shot > img:first-child{ translate:0 var(--pary, 0px); }
+/* and the copy arrives a paragraph at a time, on scroll, not on entry */
+.night__copy .body--lg{
+  --k:clamp(0, calc(var(--p, 1) * 3.4 - var(--i) * .42 - .35), 1);
+  opacity:var(--k);
+  translate:0 calc((1 - var(--k)) * 26px);
+}
+
+/* ── 7. the quote: words light up as you read down ──
+   visibility is held until app.js has built the spans, same guard as
+   [data-split], so the unsplit sentence never flashes */
+[data-words]{ visibility:hidden; }
+[data-words].ready{ visibility:visible; }
+   Each word sits dim; its bright twin fades in when the section's
+   progress passes that word's position in the sentence. */
+.quote__text .qw{
+  position:relative; display:inline-block;
+  color:rgba(250,251,247,.17);
+}
+.quote__text .qw::after{
+  content:attr(data-w); position:absolute; left:0; top:0;
+  color:var(--white); white-space:nowrap;
+  opacity:clamp(0, calc(var(--p, 1) * var(--n, 1) * 1.5 - var(--i) - .2), 1);
+  text-shadow:0 0 26px rgba(251,193,31,.16);
+}
+.quote .byline{
+  --k:clamp(0, calc(var(--p, 1) * 2.2 - 1.1), 1);
+  opacity:var(--k);
+  translate:0 calc((1 - var(--k)) * 18px);
+}
+
+/* ── 8. event details: the four cards deal in on scroll ── */
+.statgrid .stat{
+  --k:clamp(0, calc(var(--p, 1) * 3.6 - var(--i) * .5 - .5), 1);
+  opacity:var(--k);
+  translate:0 calc((1 - var(--k)) * 30px);
+  scale:calc(.97 + var(--k) * .03);
+}
+
+/* ── 9. the CTA leans toward the pointer ── */
+.pill--cta{
+  translate:var(--magx, 0px) var(--magy, 0px);
+  transition:translate .28s var(--ease);
+}
+
+/* ── 10. showcase: the strips settle into place as the section arrives ── */
+.reel{
+  --k:clamp(0, calc(var(--p, 1) * 3 - .25), 1);
+  opacity:var(--k);
+}
+.reel__row--a{ translate:calc((1 - var(--k, 1)) *  7%) 0; }
+.reel__row--b{ translate:calc((1 - var(--k, 1)) * -7%) 0; }
+
+
+
+@media (max-width:760px){
+  /* no room for the cue beside the props at phone width. This has to sit
+     AFTER the .cue rule above — the v1 mobile block earlier in the file
+     comes first in source order and loses to it. */
+  .cue{ display:none; }
+
+}
+@media (prefers-reduced-motion:reduce){
+  /* every scrubbed rule reads --p; pinning it at 1 lands the page in its
+     finished state with nothing in motion */
+  [data-scrub]{ --p:1 !important; }
+  .prog, .cue{ display:none; }
+  .night__shot > img:first-child{ translate:0 !important; }
+  .hero__money, .fig, .lockup, .hero__sub, .offer, .hero__brand,
+  .reel__row--a, .reel__row--b{ translate:0 !important; scale:1 !important; }
+  .lockup, .hero__sub{ opacity:1 !important; }
+  /* the .lk rects carry their own horizontal offsets in `translate`; the reset
+     above would drop them, so they are restored rather than zeroed */
+  .lk--top{ translate:-.9731% 0 !important; }
+  .lk--rt{ translate:.3193% 0 !important; }
+}
