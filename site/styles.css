@@ -936,25 +936,21 @@ html.smooth{ scroll-behavior:auto; }
 
 /* ── 7. the quote: words light up as you read down ──
    visibility is held until app.js has built the spans, same guard as
-   [data-split], so the unsplit sentence never flashes */
+   [data-split], so the unsplit sentence never flashes.
+   Fade the actual word instead of drawing a second, absolutely-positioned
+   copy. The duplicate layer could detach from its inline word during font
+   reflow and pile several bright words on top of the first line. */
 [data-words]{ visibility:hidden; }
 [data-words].ready{ visibility:visible; }
-   Each word sits dim; its bright twin fades in when the section's
-   progress passes that word's position in the sentence. */
 .quote__text .qw{
-  position:relative; display:inline-block;
-  color:rgba(250,251,247,.17);
-}
-.quote__text .qw::after{
-  content:attr(data-w); position:absolute; left:0; top:0;
-  color:var(--white); white-space:nowrap;
-  opacity:clamp(0, calc(var(--p, 1) * var(--n, 1) * 1.5 - var(--i) - .2), 1);
+  display:inline-block;
+  color:var(--white);
+  opacity:clamp(.17, calc(var(--p, 1) * var(--n, 1) * 1.5 - var(--i) - .2), 1);
   text-shadow:0 0 26px rgba(251,193,31,.16);
 }
 .quote .byline{
-  --k:clamp(0, calc(var(--p, 1) * 2.2 - 1.1), 1);
-  opacity:var(--k);
-  translate:0 calc((1 - var(--k)) * 18px);
+  opacity:1;
+  translate:none;
 }
 
 /* ── 8. event details: the four cards deal in on scroll ── */
