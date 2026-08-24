@@ -739,26 +739,38 @@ em{ font-style:italic; }
   }
   .hero{ padding-bottom:0; }
 
-  /* Section two is 1078 × 1134.15 in the Figma frame. It remains a compact
-     editorial row: board at left, copy at right, ribbon closing the section. */
+  /* On a phone the board needs enough width to read, and the copy needs the
+     same body size as the sections below. Keep the Figma heading/props, then
+     stack the board above the copy instead of squeezing them into one row. */
   .night{
-    width:100%; min-width:0; height:auto; min-height:0;
-    aspect-ratio:1078 / 1134.15;
+    width:100%; min-width:0; min-height:980px;
+    height:clamp(980px, calc(118vw + 28rem), 1450px);
+    aspect-ratio:auto;
   }
   .night .container{ width:100%; }
-  .night__logo{ left:37.5%; top:4.2%; width:25%; transform:none; }
-  .stack{ top:11.2%; width:78%; }
+  .night__logo{ left:37.5%; top:4vw; width:25%; transform:none; }
+  .stack{ top:11vw; width:78%; }
   .stack__a{ font-size:6.8vw; }
   .stack__b{ font-size:9.5vw; }
-  .night__shot{ left:11.6%; top:41.5%; width:38%; transform:rotate(1deg); }
-  .night__copy{ left:53.6%; right:auto; top:41.5%; width:35.5%; }
-  .body--lg{ font-size:1.25vw; line-height:1.34; }
-  .prop--n1{ left:auto; right:-5%; top:18.3%; width:20.5%; }
+  .night__body{ top:50vw; height:auto; display:block; }
+  .night__shot{
+    position:relative; left:auto; top:auto; width:84%;
+    margin:0 auto; transform:rotate(1deg);
+  }
+  .night__copy{
+    position:relative; left:auto; right:auto; top:auto; width:84%;
+    margin:clamp(24px,6vw,36px) auto 0;
+  }
+  .body--lg{
+    font-size:clamp(.95rem,4vw,1.08rem); line-height:1.45;
+    opacity:1 !important; translate:none !important;
+  }
+  .prop--n1{ left:auto; right:-5%; top:18vw; width:20.5%; }
   .prop--n2{ display:none; }
-  .prop--n2m{ display:block; left:-6%; top:22%; width:14%; }
+  .prop--n2m{ display:block; left:2%; top:18vw; width:14%; }
   .prop--n3{ left:88%; top:78%; width:12%; }
   .prop--n4{ left:72%; right:auto; top:76%; width:10%; }
-  .ribbon{ top:80%; }
+  .ribbon{ top:calc(118vw + 21rem); }
   /* phone: the strips stay, just shorter and straighter */
   .reel{ --h:clamp(122px,34vw,190px); --gap:8px; --loop:34s; margin-top:38px; }
   .reel__row--a{ transform:rotate(-.7deg); }
