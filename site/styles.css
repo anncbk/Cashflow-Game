@@ -685,9 +685,12 @@ em{ font-style:italic; }
   .lede{ max-width:none }
 }
 @media (max-width:760px){
-  :root{ --pad:clamp(20px,5.6vw,26px); }
+  :root{
+    --pad:clamp(20px,5.6vw,26px);
+    --section-space:clamp(68px,18vw,92px);
+  }
   body{ font-size:16px }
-  .sec{ padding-top:clamp(68px,18vw,92px); padding-bottom:clamp(68px,18vw,92px); }
+  .sec{ padding-top:var(--section-space); padding-bottom:var(--section-space); }
   .nav__mid{ display:none }
   .nav__mark{ font-size:.68rem }
   /* ── Figma mobile frame 1210:2 ─────────────────────────────
@@ -743,16 +746,19 @@ em{ font-style:italic; }
      same body size as the sections below. Keep the Figma heading/props, then
      stack the board above the copy instead of squeezing them into one row. */
   .night{
-    width:100%; min-width:0; min-height:980px;
-    height:clamp(980px, calc(118vw + 28rem), 1450px);
-    aspect-ratio:auto;
+    width:100%; min-width:0; min-height:0; height:auto;
+    padding:0 0 var(--section-space); aspect-ratio:auto;
   }
   .night .container{ width:100%; }
+  .night__head{ position:relative; height:50vw; }
   .night__logo{ left:37.5%; top:4vw; width:25%; transform:none; }
   .stack{ top:11vw; width:78%; }
   .stack__a{ font-size:6.8vw; }
   .stack__b{ font-size:9.5vw; }
-  .night__body{ top:50vw; height:auto; display:block; }
+  .night__body{
+    position:relative; left:auto; right:auto; top:auto;
+    height:auto; display:block;
+  }
   .night__shot{
     position:relative; left:auto; top:auto; width:84%;
     margin:0 auto; transform:rotate(1deg);
@@ -770,7 +776,10 @@ em{ font-style:italic; }
   .prop--n2m{ display:block; left:2%; top:18vw; width:14%; }
   .prop--n3{ left:88%; top:78%; width:12%; }
   .prop--n4{ left:72%; right:auto; top:76%; width:10%; }
-  .ribbon{ top:calc(118vw + 21rem); }
+  .ribbon{
+    position:relative; left:-3.92%; top:auto;
+    margin-top:calc(var(--section-space) * .5);
+  }
   /* phone: the strips stay, just shorter and straighter */
   .reel{ --h:clamp(122px,34vw,190px); --gap:8px; --loop:34s; margin-top:38px; }
   .reel__row--a{ transform:rotate(-.7deg); }
@@ -793,7 +802,7 @@ em{ font-style:italic; }
   .sharp{ padding:11px 18px; font-size:.95rem; }
   .fineprint{ max-width:36ch; }
   .pill--cta{ width:min(100%,260px); padding:18px 24px; }
-  .foot{ padding-top:40px; padding-bottom:46px; }
+  .foot{ padding-top:var(--section-space); padding-bottom:var(--section-space); }
   .foot__a{ font-size:.82rem; letter-spacing:.11em; }
 }
 @media (prefers-reduced-motion:reduce){
