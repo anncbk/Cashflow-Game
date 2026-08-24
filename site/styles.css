@@ -466,6 +466,7 @@ em{ font-style:italic; }
 .prop--n1{ left:auto; right:2%; top:18.4%; width:13.4%; --spin:29.63deg; }   /* white die */
 .prop--n2{ left:1.5%; top:26%; width:19.4%; --spin:-6deg;                    /* the car */
   filter:drop-shadow(0 26px 38px rgba(0,0,0,.55)); }
+.prop--n2m{ display:none; }
 .prop--n3{ position:absolute; left:70%; top:76%; width:13%; z-index:4; --spin:20deg; }  /* blue die */
 .prop--n4{ position:absolute; left:88%; top:66%; width:16%; z-index:4;       /* blue pawn */
   filter:drop-shadow(0 16px 22px rgba(0,0,0,.5)); }
@@ -689,70 +690,75 @@ em{ font-style:italic; }
   .sec{ padding-top:clamp(68px,18vw,92px); padding-bottom:clamp(68px,18vw,92px); }
   .nav__mid{ display:none }
   .nav__mark{ font-size:.68rem }
-  /* ── hero at phone width ──
-     A 1920 × 1080 banner cannot hold at 375px: the type would be 40px tall
-     and the figures 60px wide. So the stage becomes a portrait box and the
-     banner is re-stacked in bands — logo, title, subtitle, the offer, then the
-     two figures standing on the floor. Same DOM, same eight parts.
-     The figures keep their own aspect here (height:auto) so the whole plate
-     shows head to hip; that also fixes the thing worth remembering, which is
-     that the offer group and the faces want the same band, and the faces lose
-     if you let them share it. */
+  /* ── Figma mobile frame 1210:2 ─────────────────────────────
+     The source frame is 1080 × 2362. Its first section ends at y=1167 and
+     keeps the same layered composition as desktop; it is not a stacked hero.
+     Percentages below are the measured Figma rects divided by 1080 × 1167. */
   .hero__stage{
-    width:100%; min-width:0; height:clamp(640px, 172vw, 800px);
-    aspect-ratio:auto;
+    width:100%; min-width:0; height:auto; min-height:0;
+    aspect-ratio:1080 / 1167;
   }
-  .hero__brand{ left:50%; translate:-50% 0; top:3%; width:40%; }
+  .hero__brand{ left:50%; translate:-50% 0; top:6.1%; width:25.3%; }
   .lk{ translate:0 0 !important; }
-  /* Keep the desktop title hierarchy: THE stays beside INVE$TOR'S. The pair
-     scales as one centred line, while ROUNDTABLE keeps its own line below. */
-  .lk--top{ top:10.4%; font-size:13.5vw; white-space:nowrap; }
+  .lk--top{
+    top:calc(26.65% - .29775em);
+    font-size:16.65vw; white-space:nowrap;
+  }
   .lk__the,
   .lk__inv{ display:inline; }
   .lk__the{ font-size:.4588em; }
   .lk__inv{ margin-left:.0798em; margin-top:0; }
-  .lk--rt { top:19.6%; font-size:13.8vw; line-height:1.5; }
+  .lk--rt{
+    top:calc(41.2% - .45512em);
+    font-size:16.65vw; line-height:1.5;
+  }
   .hero__sub{
-    top:30.8%; padding-inline:8%;
-    font-size:clamp(.78rem,3.5vw,.96rem); line-height:1.35;
+    left:18.5%; right:18.5%; top:55.27%; padding:0;
+    font-size:2.88vw; line-height:1.2647;
   }
-  /* the offer group: box left, pills right, die between them */
-  .offer__box{ left:2%;  top:40%; width:50%; height:18%; }
-  /* between the box and the pills, not behind them — at left:43% its right
-     corner disappeared under the second pill and read as a clipped shape */
-  .offer__die{ left:40%; top:46.5%; width:11%; }
+  .hero__break{ display:none; }
+  .offer__box{ left:14.325%; top:63.496%; width:42.478%; height:36.773%; }
+  .offer__die{ left:12.6%; top:91.2%; width:9%; }
   .price{
-    left:54%; width:44%; height:7%; top:40.5%;
-    border-radius:6px; box-shadow:inset 0 2px 2px rgba(0,0,0,.4);
+    left:53.455%; width:32.541%; height:8.2%; top:71.561%;
+    border-radius:.93vw; box-shadow:inset 0 .18vw .18vw rgba(0,0,0,.4);
   }
-  .price--two{ top:49%; }
-  .price__k{ font-size:4vw; }
-  .price__v{ font-size:9vw; }
-  /* The two figures stand on the floor band, and their widths are set from
-     their own plate ratios rather than by eye — benny's plate is 1.787 tall
-     for its width against ivan's 1.609, so an equal width puts his head 8%
-     higher and straight under the second price pill. */
-  .fig--ivan{  left:-6%;  top:auto; bottom:0; width:46%; height:auto; }
-  .fig--benny{ left:auto; right:-8%; top:auto; bottom:0; width:42%; height:auto; }
-  .hero__floor{ top:53%; height:47%; }
-  /* the pools were cut for a wide frame; on a tall one they read as smudges */
-  .pool--l{ left:2%;  top:9%;  width:48%; height:26%; }
-  .pool--r{ left:50%; top:9%;  width:48%; height:26%; }
-  .pool--mid{ left:14%; top:40%; width:72%; height:24%; }
-  .hero__bloom{ left:2%; top:40%; width:96%; height:28%; }
+  .price--two{ top:81.276%; }
+  .price__k{ font-size:2.75vw; }
+  .price__v{ font-size:6.55vw; }
+  .fig--ivan{ left:1.389%; top:.428%; bottom:auto; width:41.392%; height:auto; }
+  .fig--benny{ left:60.647%; right:auto; top:2.717%; bottom:auto; width:35.864%; height:auto; }
+  .hero__floor{ top:43%; height:57%; }
+  .pool--l{ left:3%; top:18%; width:38%; height:35%; }
+  .pool--r{ left:59%; top:18%; width:38%; height:35%; }
+  .pool--mid{ left:25%; top:60%; width:45%; height:28%; }
+  .hero__bloom{ left:8%; top:60%; width:84%; height:38%; }
+  .hero__bloom{
+    background:radial-gradient(ellipse 50% 32% at 50% 50%,
+      rgba(132,39,151,.96) 0%, rgba(118,29,127,.68) 46%, rgba(118,29,127,0) 84%);
+  }
   .hero{ padding-bottom:0; }
-  .night{ width:100%; min-width:0; aspect-ratio:auto; height:clamp(1160px,346vw,1350px); }
-  .night__logo{ left:50%; top:4%; width:43%; transform:translateX(-50%); }
-  .stack{ top:12.5%; width:90%; }
-  .stack__a{ font-size:clamp(1.8rem,8vw,2.4rem); }
-  .stack__b{ font-size:clamp(2.15rem,9.4vw,2.85rem); }
-  .night__shot{ left:8%; top:38%; width:84%; }
-  .night__copy{ left:9%; right:9%; top:63%; width:auto; }
-  .body--lg{ font-size:clamp(.95rem,4vw,1.08rem); line-height:1.38; }
-  .prop--n1{ left:auto; right:3%; top:24%; width:18%; }
-  .prop--n2{ left:2%; top:31%; width:34%; }          /* the car needs the width */
-  .prop--n4{ left:auto; right:2%; top:72%; width:11%; }
-  .ribbon{ top:92%; }
+
+  /* Section two is 1078 × 1134.15 in the Figma frame. It remains a compact
+     editorial row: board at left, copy at right, ribbon closing the section. */
+  .night{
+    width:100%; min-width:0; height:auto; min-height:0;
+    aspect-ratio:1078 / 1134.15;
+  }
+  .night .container{ width:100%; }
+  .night__logo{ left:37.5%; top:4.2%; width:25%; transform:none; }
+  .stack{ top:11.2%; width:78%; }
+  .stack__a{ font-size:6.8vw; }
+  .stack__b{ font-size:9.5vw; }
+  .night__shot{ left:11.6%; top:41.5%; width:38%; transform:rotate(1deg); }
+  .night__copy{ left:53.6%; right:auto; top:41.5%; width:35.5%; }
+  .body--lg{ font-size:1.25vw; line-height:1.34; }
+  .prop--n1{ left:auto; right:-5%; top:18.3%; width:20.5%; }
+  .prop--n2{ display:none; }
+  .prop--n2m{ display:block; left:-6%; top:22%; width:14%; }
+  .prop--n3{ left:88%; top:78%; width:12%; }
+  .prop--n4{ left:72%; right:auto; top:76%; width:10%; }
+  .ribbon{ top:80%; }
   /* phone: the strips stay, just shorter and straighter */
   .reel{ --h:clamp(122px,34vw,190px); --gap:8px; --loop:34s; margin-top:38px; }
   .reel__row--a{ transform:rotate(-.7deg); }
