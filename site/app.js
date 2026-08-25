@@ -192,7 +192,7 @@
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-  $$('.sec .wrap, .fan').forEach(function (el) { el.setAttribute('data-rise', ''); });
+  $$('.sec .wrap:not([data-static]), .fan').forEach(function (el) { el.setAttribute('data-rise', ''); });
   $$('[data-rise], [data-reveal], [data-clip]').forEach(function (el) { io.observe(el); });
   var splitTargets = $$('[data-split]');
   whenFontsReady(function () {
@@ -322,8 +322,11 @@
   function chrome() {
     if (!progBar) return;
     var max = maxScroll();
-    progBar.style.setProperty('--sp', (max > 0 ? clamp(Scroll.y / max, 0, 1) : 0).toFixed(4));
+    var realY = window.scrollY || document.documentElement.scrollTop || 0;
+    var p = max > 0 ? clamp(realY / max, 0, 1) : 0;
+    progBar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
   }
+  addEventListener('scroll', chrome, { passive: true });
 
   /* ══ 6c. WORD-BY-WORD ILLUMINATION ═════════════════════════
      The bright copy of each word lives in a ::after fed by data-w, so the
