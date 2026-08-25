@@ -680,6 +680,47 @@ em{ font-style:italic; }
   font-size:clamp(.98rem,1.7vw,1.22rem); line-height:1.08; letter-spacing:.01em;
 }
 .stat i{ font-family:var(--f-mono); font-style:normal; font-size:.82rem; color:var(--grey); }
+.stat--entry{ grid-column:1 / -1; gap:10px; }
+.entry-options{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(10px,1.2vw,14px); margin-top:4px;
+}
+.entry-ticket{
+  min-width:0; min-height:72px; padding:10px 10px 10px 14px;
+  display:flex; align-items:center; gap:clamp(7px,.8vw,11px);
+  border-radius:clamp(9px,.8vw,12px); overflow:hidden;
+  background:linear-gradient(0deg,#458715 0%,#6BD41F 42.031%,#D3FFB2 100%);
+  box-shadow:inset 0 2px 2px rgba(0,0,0,.34);
+  color:#0B0B0B; text-decoration:none; font-family:var(--f-cond2);
+  transition:filter .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.entry-ticket:hover{
+  filter:brightness(1.08); transform:translateY(-2px);
+  box-shadow:inset 0 2px 2px rgba(0,0,0,.28),0 12px 28px rgba(107,212,31,.18);
+}
+.entry-ticket:focus-visible{ outline:2px solid var(--white); outline-offset:3px; }
+.entry-ticket__ic{ width:22px; height:auto; flex:0 0 auto; }
+.entry-ticket__ic--two{ width:27px; }
+.entry-ticket__pax{
+  flex:0 0 auto; font-weight:700; font-size:1rem;
+  line-height:1; letter-spacing:.01em; text-transform:uppercase; white-space:nowrap;
+}
+.stat .entry-ticket__price{
+  flex:0 0 auto; margin-left:auto; padding-left:clamp(10px,1vw,14px);
+  border-left:1.5px solid #0B0B0B;
+  font-family:var(--f-cond2); font-size:clamp(2rem,2.8vw,2.7rem);
+  line-height:1; letter-spacing:-.02em;
+}
+.entry-ticket__cta{
+  flex:0 0 auto; min-width:clamp(82px,8vw,106px); min-height:42px;
+  padding:0 12px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; gap:.25em;
+  background:#0B0B0B; color:var(--white);
+  font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.entry-ticket:hover .entry-ticket__cta{ background:var(--white); color:#0B0B0B; }
+.stat .entry-note{ margin-top:2px; }
 .sharp{
   display:inline-block; margin:0; border:1px solid rgba(242,198,0,.5); border-radius:99px;
   padding:12px 24px; font-size:1.05rem; color:var(--white);
@@ -819,6 +860,13 @@ em{ font-style:italic; }
   .details .lede{ font-size:1.05rem; }
   .statgrid{ grid-template-columns:1fr; gap:12px; margin-top:32px; }
   .stat{ padding:18px; }
+  .entry-options{ grid-template-columns:1fr; }
+  .entry-ticket{ min-height:68px; padding:9px 9px 9px 12px; }
+  .entry-ticket__ic{ width:20px; }
+  .entry-ticket__ic--two{ width:25px; }
+  .entry-ticket__pax{ font-size:.94rem; }
+  .stat .entry-ticket__price{ font-size:2rem; }
+  .entry-ticket__cta{ min-width:88px; min-height:40px; font-size:.72rem; }
   .sharp{ padding:11px 18px; font-size:.95rem; }
   .fineprint{ max-width:36ch; }
   .pill--cta{ width:min(100%,260px); padding:18px 24px; }
