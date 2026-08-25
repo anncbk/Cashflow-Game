@@ -283,12 +283,12 @@ em{ font-style:italic; }
   filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));
 }
 
-/* the two price pills. 266 × 72.27, radius 10.04, and a gradient that runs
-   UP from #458715 through #6BD41F at 42% to #D3FFB2. Everything inside is
-   placed as a % of the pill, so the pill scales as one piece. */
+/* The Figma price pills now double as payment CTAs. Their original green
+   gradient remains the ticket surface; a compact dark REGISTER control makes
+   the action explicit while the whole card stays clickable. */
 .price{
   position:absolute; z-index:5; margin:0;
-  left:55.2083%; width:13.8542%; height:6.6919%;         /* 1060 · 266 × 72.27 */
+  left:55.2083%; width:18.54%; height:6.6919%;
   top:67.4565%;                                          /* 728.53 */
   /* radius and inset shadow are in vw, not em: `em` would resolve against
      this box's font-size, which is not the pill height, and the corner came
@@ -297,25 +297,43 @@ em{ font-style:italic; }
   background:linear-gradient(0deg, #458715 0%, #6BD41F 42.031%, #D3FFB2 100%);
   box-shadow:inset 0 .0993vw .0993vw rgba(0,0,0,.4);     /* 1.907 / 1920 */
   font-family:var(--f-cond2); color:#0B0B0B; line-height:1;
+  text-decoration:none; pointer-events:auto; cursor:pointer; overflow:hidden;
+  transition:filter .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
 }
+.price:hover{
+  filter:brightness(1.08);
+  transform:translateY(-2px);
+  box-shadow:inset 0 .0993vw .0993vw rgba(0,0,0,.35), 0 10px 24px rgba(107,212,31,.2);
+}
+.price:focus-visible{ outline:2px solid var(--white); outline-offset:3px; }
 .price--two{ top:75.4019%; }                             /* 814.34 */
 .price__ic{
-  position:absolute; left:9.895%; top:50%; translate:0 -50%;
-  width:8.601%; height:auto;
+  position:absolute; left:5.5%; top:50%; translate:0 -50%;
+  width:7.5%; height:auto;
 }
-.price--two .price__ic{ left:7.667%; width:11.236%; }    /* the two-person glyph is wider */
+.price--two .price__ic{ left:4.5%; width:9.5%; }
 .price__k{
-  position:absolute; left:23.286%; top:50%; translate:0 -50%;
-  font-size:1.3734vw; font-weight:700; letter-spacing:.005em;
+  position:absolute; left:15.5%; top:50%; translate:0 -50%;
+  font-size:1.2vw; font-weight:700; letter-spacing:.005em;
   text-transform:uppercase; line-height:1;
 }
 .price__v{
-  position:absolute; left:58.060%; top:50%; translate:0 -50%;
-  font-size:3.1461vw; font-weight:700; line-height:1; letter-spacing:-.01em;
+  position:absolute; left:42.5%; top:50%; translate:0 -50%;
+  font-size:2.7vw; font-weight:700; line-height:1; letter-spacing:-.01em;
 }
+.price__cta{
+  position:absolute; right:2.6%; top:50%; translate:0 -50%;
+  width:29%; height:62%; border-radius:.36vw;
+  display:flex; align-items:center; justify-content:center; gap:.18em;
+  background:#0B0B0B; color:var(--white);
+  font-size:.72vw; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  transition:background .2s var(--ease), color .2s var(--ease);
+}
+.price__cta i{ font-style:normal; font-size:.9em; }
+.price:hover .price__cta{ background:var(--white); color:#0B0B0B; }
 /* Vector 8 — the hairline between the label and the price */
 .price::after{
-  content:''; position:absolute; left:51.729%; top:50%; translate:0 -50%;
+  content:''; position:absolute; left:37.5%; top:50%; translate:0 -50%;
   width:1.525px; height:57.51%; background:#0B0B0B;
 }
 
@@ -724,12 +742,13 @@ em{ font-style:italic; }
   .offer__box{ left:14.325%; top:76.6vw; width:42.478%; height:39.75vw; }
   .offer__die{ left:12.6%; top:106.5vw; width:9%; }
   .price{
-    left:53.455%; width:32.541%; height:8.86vw; top:85.3vw;
+    left:52%; width:42%; height:10vw; top:84.8vw;
     border-radius:.93vw; box-shadow:inset 0 .18vw .18vw rgba(0,0,0,.4);
   }
-  .price--two{ top:95.8vw; }
-  .price__k{ font-size:2.75vw; }
-  .price__v{ font-size:6.55vw; }
+  .price--two{ top:96vw; }
+  .price__k{ font-size:2.5vw; }
+  .price__v{ font-size:5.4vw; }
+  .price__cta{ border-radius:.9vw; font-size:2.05vw; }
   .fig--ivan{ left:1.389%; top:.428%; bottom:auto; width:41.392%; height:auto; }
   .fig--benny{ left:60.647%; right:auto; top:2.717%; bottom:auto; width:35.864%; height:auto; }
   .hero__floor{ top:43%; height:57%; }
