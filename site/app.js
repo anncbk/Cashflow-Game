@@ -17,53 +17,14 @@
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var coarse  = matchMedia('(pointer: coarse)').matches;
 
-  /* ══ 1. SMOOTH SCROLL ══════════════════════════════════════
-     Native scroll on touch (its momentum is better than anything
-     we can fake). On pointer devices, lerp toward a virtual target. */
+  /* ══ 1. NATIVE SCROLL ══════════════════════════════════════
+     Keep scrolling browser-native on every input method. The previous
+     wheel interception could fight scrollbar dragging and leave the page
+     pinned to a stale virtual target on some desktop browsers. CSS handles
+     the optional smooth behaviour for in-page links. */
   var Scroll = { y: window.scrollY, target: window.scrollY, vel: 0, smooth: false };
 
   function maxScroll() { return document.documentElement.scrollHeight - innerHeight; }
-
-  if (!reduced && !coarse) {
-    Scroll.smooth = true;
-    document.documentElement.classList.add('smooth');
-
-    addEventListener('wheel', function (e) {
-      if (e.ctrlKey) return;                 /* let pinch-zoom through */
-      e.preventDefault();
-      Scroll.target = clamp(Scroll.target + e.deltaY, 0, maxScroll());
-    }, { passive: false });
-
-    addEventListener('keydown', function (e) {
-      var t = e.target.tagName;
-      if (t === 'INPUT' || t === 'TEXTAREA' || e.target.isContentEditable) return;
-      var step = innerHeight * 0.85, d = null;
-      if (e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) d = step;
-      else if (e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) d = -step;
-      else if (e.key === 'ArrowDown') d = 110;
-      else if (e.key === 'ArrowUp') d = -110;
-      else if (e.key === 'Home') { Scroll.target = 0; e.preventDefault(); return; }
-      else if (e.key === 'End') { Scroll.target = maxScroll(); e.preventDefault(); return; }
-      if (d !== null) { e.preventDefault(); Scroll.target = clamp(Scroll.target + d, 0, maxScroll()); }
-    });
-
-    /* in-page links glide instead of jumping */
-    $$('a[href^="#"]').forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        var id = a.getAttribute('href');
-        if (id === '#') return;
-        var el = $(id);
-        if (!el) return;
-        e.preventDefault();
-        Scroll.target = clamp(el.getBoundingClientRect().top + Scroll.y, 0, maxScroll());
-      });
-    });
-
-    /* a scrollbar drag or a browser-driven jump wins over our target */
-    addEventListener('scroll', function () {
-      if (Math.abs(window.scrollY - Scroll.y) > 6) Scroll.target = Scroll.y = window.scrollY;
-    }, { passive: true });
-  }
 
   /* ══ 2. EDITORIAL SHOWCASE — THE TWO STRIPS ════════════════
      The looping drift is CSS. This adds the part CSS cannot feel: how
