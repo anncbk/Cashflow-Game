@@ -39,6 +39,12 @@
   --f-body: "Manrope", system-ui, sans-serif;
   --f-mono: "Manrope", ui-monospace, monospace;
 
+  /* type scale — one set of sizes so nothing on a phone drops under ~13px for
+     a label or ~16px for copy. Root is 17px on desktop and 16px on phones. */
+  --fs-body:  1.05rem;   /* copy: 17.9px desktop, 16.8px phone */
+  --fs-small: .92rem;    /* notes, captions, footer line: 15.6 / 14.7 */
+  --fs-label: .84rem;    /* uppercase mono eyebrows and numbering: 14.3 / 13.4 */
+
   --pad: clamp(18px, 4.4vw, 64px);
   --maxw: 1320px;
   --r: clamp(16px, 2.2vw, 30px);
@@ -77,15 +83,17 @@ em{ font-style:italic; }
 }
 
 /* ══════════ TYPE ══════════ */
+/* Caps, but sized to lead the section rather than swallow it — roughly half
+   the old display scale. */
 .h2{
   font-family:var(--f-disp); font-weight:800; text-transform:uppercase;
-  font-size:clamp(2.3rem, 6.2vw, 5.6rem); line-height:.92; letter-spacing:-.055em;
+  font-size:clamp(1.9rem, 4.2vw, 3.4rem); line-height:1.04; letter-spacing:-.035em;
   margin:0 0 .4em; color:var(--white);
 }
 .h2--ink{ color:var(--white); }
 
 .label{
-  font-family:var(--f-mono); font-weight:700; font-size:.76rem; letter-spacing:.26em;
+  font-family:var(--f-mono); font-weight:700; font-size:var(--fs-label); letter-spacing:.24em;
   text-transform:uppercase; color:var(--lime); margin:0 0 1.5em;
 }
 .sec--bone .label{ color:var(--gold); }
@@ -94,11 +102,11 @@ em{ font-style:italic; }
   margin:0; max-width:42ch; font-weight:600;
 }
 .lede--ink{ color:var(--white); font-weight:700; }
-.body{ color:var(--grey); margin:0 0 .85em; max-width:58ch; font-size:1.02rem; }
+.body{ color:var(--grey); margin:0 0 .85em; max-width:58ch; font-size:var(--fs-body); }
 .body:last-child{ margin-bottom:0; }
 .body--ink{ color:#b7b7b7; opacity:1; font-weight:400; }
 .fineprint{
-  font-family:var(--f-mono); font-size:.84rem; line-height:1.55; color:var(--grey);
+  font-family:var(--f-mono); font-size:var(--fs-small); line-height:1.55; color:var(--grey);
   max-width:64ch; margin:14px auto 0; letter-spacing:.01em;
 }
 
@@ -111,6 +119,20 @@ em{ font-style:italic; }
   margin-top:clamp(22px,3vw,44px);
 }
 .cols__b{ display:grid; gap:0; align-content:start; }
+/* centred sections: label, heading and copy stack on one axis, and the
+   two-column lede/body split collapses to a single measured column */
+.wrap--center{ text-align:center; }
+.wrap--center .h2,
+.wrap--center .lede,
+.wrap--center .body{ margin-inline:auto; }
+.wrap--center .cols{
+  grid-template-columns:minmax(0,1fr); justify-items:center;
+  gap:clamp(14px,1.8vw,22px); max-width:62ch; margin-inline:auto;
+}
+.wrap--center .cols__b{ justify-items:center; }
+.wrap--center .lede{ max-width:46ch; }
+/* the question list keeps its bullets and left edge, centred as one block */
+.wrap--center .asks{ display:inline-grid; text-align:left; }
 
 /* ══════════ NAV ══════════ */
 .nav{
@@ -145,14 +167,14 @@ em{ font-style:italic; }
 
 .pill{
   display:inline-flex; align-items:center; justify-content:center; text-decoration:none;
-  font-family:var(--f-mono); font-weight:700; font-size:.8rem; letter-spacing:.16em; text-transform:uppercase;
+  font-family:var(--f-mono); font-weight:700; font-size:.88rem; letter-spacing:.16em; text-transform:uppercase;
   border-radius:99px; padding:11px 20px; white-space:nowrap; transition:.22s var(--ease);
 }
 .pill--white{ background:var(--white); color:var(--ink); }
 .pill--white:hover{ background:var(--lime); }
 .pill--cta{
   background:var(--white); color:var(--ink);
-  font-size:clamp(.82rem,1.5vw,1rem); padding:20px 42px; letter-spacing:.1em;
+  font-size:clamp(.9rem,1.5vw,1rem); padding:20px 42px; letter-spacing:.1em;
   margin-top:clamp(26px,4vw,44px);
 }
 .pill--cta:hover{ background:var(--lime); transform:translateY(-3px); }
@@ -283,9 +305,9 @@ em{ font-style:italic; }
   filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));
 }
 
-/* The Figma price pills now double as payment CTAs. Their original green
-   gradient remains the ticket surface; a compact dark REGISTER control makes
-   the action explicit while the whole card stays clickable. */
+/* The Figma price pills are the ticket surface and the price display. They are
+   no longer two competing calls to action: both link to the single embedded
+   form at #details, which is where either option is chosen and paid for. */
 .price{
   position:absolute; z-index:5; margin:0;
   left:55.2083%; width:18.54%; height:6.6919%;
@@ -321,16 +343,6 @@ em{ font-style:italic; }
   position:absolute; left:42.5%; top:50%; translate:0 -50%;
   font-size:2.7vw; font-weight:700; line-height:1; letter-spacing:-.01em;
 }
-.price__cta{
-  position:absolute; right:2.6%; top:50%; translate:0 -50%;
-  width:29%; height:62%; border-radius:.36vw;
-  display:flex; align-items:center; justify-content:center; gap:.18em;
-  background:#0B0B0B; color:var(--white);
-  font-size:.72vw; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-  transition:background .2s var(--ease), color .2s var(--ease);
-}
-.price__cta i{ font-style:normal; font-size:.9em; }
-.price:hover .price__cta{ background:var(--white); color:#0B0B0B; }
 /* Vector 8 — the hairline between the label and the price */
 .price::after{
   content:''; position:absolute; left:37.5%; top:50%; translate:0 -50%;
@@ -709,7 +721,7 @@ em{ font-style:italic; }
 }
 .byline{ display:inline-grid; gap:3px; }
 .byline__name{ font-family:var(--f-disp); font-weight:900; text-transform:uppercase; font-size:1.05rem; letter-spacing:.06em; color:var(--gold); }
-.byline__role{ font-family:var(--f-mono); font-size:.74rem; letter-spacing:.22em; text-transform:uppercase; color:var(--grey); }
+.byline__role{ font-family:var(--f-mono); font-size:var(--fs-small); letter-spacing:.18em; text-transform:uppercase; color:var(--grey); }
 
 /* ══════════ DETAILS ══════════ */
 .details{ overflow:hidden; text-align:center; }
@@ -733,57 +745,24 @@ em{ font-style:italic; }
 }
 .stat:first-child{ border-left:0; padding-left:0; }
 .stat:nth-child(3){ padding-right:0; }
-.stat__k{ font-family:var(--f-mono); font-weight:700; font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; color:var(--lime); }
+.stat__k{ font-family:var(--f-mono); font-weight:700; font-size:var(--fs-label); letter-spacing:.2em; text-transform:uppercase; color:var(--lime); }
 .stat b{
   font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
-  font-size:clamp(.98rem,1.7vw,1.22rem); line-height:1.08; letter-spacing:.01em;
+  font-size:clamp(1.05rem,1.7vw,1.22rem); line-height:1.12; letter-spacing:.01em;
 }
-.stat i{ font-family:var(--f-mono); font-style:normal; font-size:.82rem; color:var(--grey); }
+.stat i{ font-family:var(--f-mono); font-style:normal; font-size:var(--fs-small); color:var(--grey); }
 .stat--entry{
   grid-column:1 / -1; gap:12px; margin-top:clamp(22px,3vw,34px);
   padding:clamp(24px,3vw,34px) 0 0; border-left:0;
   border-top:1px solid rgba(250,251,253,.2);
 }
-.entry-options{
-  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:clamp(10px,1.2vw,14px); margin-top:4px;
-}
-.entry-ticket{
-  min-width:0; min-height:72px; padding:10px 10px 10px 14px;
-  display:flex; align-items:center; gap:clamp(7px,.8vw,11px);
-  border-radius:clamp(9px,.8vw,12px); overflow:hidden;
-  background:linear-gradient(0deg,#458715 0%,#6BD41F 42.031%,#D3FFB2 100%);
-  box-shadow:inset 0 2px 2px rgba(0,0,0,.34);
-  color:#0B0B0B; text-decoration:none; font-family:var(--f-cond2);
-  transition:filter .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
-}
-.entry-ticket:hover{
-  filter:brightness(1.08); transform:translateY(-2px);
-  box-shadow:inset 0 2px 2px rgba(0,0,0,.28),0 12px 28px rgba(107,212,31,.18);
-}
-.entry-ticket:focus-visible{ outline:2px solid var(--white); outline-offset:3px; }
-.entry-ticket__ic{ width:22px; height:auto; flex:0 0 auto; }
-.entry-ticket__ic--two{ width:27px; }
-.entry-ticket__pax{
-  flex:0 0 auto; font-weight:700; font-size:1rem;
-  line-height:1; letter-spacing:.01em; text-transform:uppercase; white-space:nowrap;
-}
-.stat .entry-ticket__price{
-  flex:0 0 auto; margin-left:auto; padding-left:clamp(10px,1vw,14px);
-  border-left:1.5px solid #0B0B0B;
-  font-family:var(--f-cond2); font-size:clamp(2rem,2.8vw,2.7rem);
-  line-height:1; letter-spacing:-.02em;
-}
-.entry-ticket__cta{
-  flex:0 0 auto; min-width:clamp(82px,8vw,106px); min-height:42px;
-  padding:0 12px; border-radius:8px;
-  display:flex; align-items:center; justify-content:center; gap:.25em;
-  background:#0B0B0B; color:var(--white);
-  font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-  transition:background .2s var(--ease),color .2s var(--ease);
-}
-.entry-ticket:hover .entry-ticket__cta{ background:var(--white); color:#0B0B0B; }
 .stat .entry-note{ margin-top:0; }
+/* The GHL form is its own white card at max-width 800px inside the iframe, so
+   the wrapper stays transparent and just centres it — no double panel. The
+   height is written by form_embed.js, never here: a min-height would fight it
+   and leave dead space under a short form. */
+.entry-form{ width:100%; margin-top:clamp(10px,1.4vw,18px); }
+.entry-form iframe{ display:block; width:100%; max-width:100%; border:0; }
 .sharp{
   display:inline-block; margin:0; border:1px solid rgba(242,198,0,.5); border-radius:99px;
   padding:12px 24px; font-size:1.05rem; color:var(--white);
@@ -796,15 +775,226 @@ em{ font-style:italic; }
   font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
   font-size:1rem; letter-spacing:.14em; margin:0 0 8px;
 }
-.foot__b{ font-family:var(--f-mono); font-size:.78rem; letter-spacing:.1em; color:var(--grey); margin:0 }
+.foot__b{ font-family:var(--f-mono); font-size:var(--fs-small); letter-spacing:.1em; color:var(--grey); margin:0 }
 
 /* ══════════ REVEAL ══════════ */
 [data-rise]{ opacity:0; transform:translateY(24px); transition:opacity .8s var(--ease), transform .8s var(--ease) }
 [data-rise].in{ opacity:1; transform:none }
 
+/* ══════════ FIRST FOLD — THE PREMISE ══════════
+   Flow layout on the page's own .sec / .wrap rhythm. Nothing here is placed
+   against a fixed frame, so the copy can grow without moving any artwork. */
+.premise{ background:#000; overflow:hidden; }
+.premise__inner{ z-index:2; }
+/* the one long heading on the page: held to a measure so it sets as a
+   balanced three-line block instead of two full lines and an orphan */
+.premise .h2{ max-width:30ch; }
+
+/* the three questions in the hosts section */
+.asks{
+  list-style:none; margin:clamp(22px,3vw,32px) 0 0; padding:0;
+  display:grid; gap:clamp(9px,1.1vw,13px); max-width:52ch;
+}
+.asks li{
+  position:relative; padding-left:26px;
+  font-family:var(--f-disp); font-weight:600;
+  font-size:var(--fs-body); line-height:1.45; color:var(--white);   /* = .body */
+}
+.asks li::before{
+  content:''; position:absolute; left:1px; top:.5em;
+  width:9px; height:9px; border-radius:2px; background:var(--lime); rotate:45deg;
+}
+.asks--gold li::before{ background:var(--gold); }
+/* both sit in the right-hand gutter, clear of the measure and clear of the
+   CTA — a prop landing on the button is the one collision that costs a tap */
+.prop--p1{ width:clamp(64px,7vw,124px); top:9%; right:4%; }
+.prop--p2{ width:clamp(56px,6vw,106px); bottom:14%; right:5%; }
+
+/* ══════════ WHAT YOU'LL WALK AWAY WITH ══════════ */
+.takeaway{ background:#000; overflow:hidden; }
+.takeaway__inner{ z-index:2; }
+/* the lead copy opens the section, so the cols sit right under the label */
+.takeaway .cols{ margin-top:0; }
+/* the two strips sit between the lead copy and the heading; the base .reel
+   top margin is cut for the showcase's taller intro, so it tightens here */
+.takeaway .reel{ margin-top:clamp(30px,4vw,64px); }
+/* the heading arrives mid-section, between the lead copy and the cards */
+.takeaway .h2{ margin:clamp(38px,5vw,64px) auto clamp(20px,2.4vw,28px); text-align:center; }
+.takeaway__grid{
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(14px,1.6vw,22px);
+}
+/* no reveal here by request: the four cards are plainly visible at all
+   times, on every scroll position */
+.tak{
+  display:grid; align-content:start; gap:10px;
+  padding:clamp(20px,2.2vw,28px);
+  border:1px solid rgba(250,251,253,.14); border-radius:clamp(12px,1.4vw,18px);
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+}
+/* number and title are set exactly like .stat__k and .stat b, so the four
+   cards here and the four event cards read as one component family */
+.tak__n{
+  font-family:var(--f-mono); font-weight:700; font-size:var(--fs-label);
+  letter-spacing:.2em; text-transform:uppercase; color:var(--lime);
+}
+.tak__h{
+  margin:0; font-family:var(--f-disp); font-weight:900; text-transform:uppercase;
+  font-size:clamp(1.05rem,1.7vw,1.22rem); line-height:1.12; letter-spacing:.01em;
+  color:var(--white);
+}
+.tak__p{ margin:0; font-size:var(--fs-body); line-height:1.5; color:#b7b7b7; }
+.prop--t1{ width:clamp(60px,6.4vw,112px); top:7%; right:4%; }
+
+/* ══════════ THIRD FOLD — YOUR HOSTS ══════════
+   Copy on the left, the room on the right — the same two-column split the
+   quote/film section uses. The photo is a card, not a backdrop: the copy sits
+   on plain black, so it needs no text-shadow and the photo needs no veil. */
+.guides{ background:#000; overflow:hidden; }
+.guides__inner{ z-index:4; }
+.guides__grid{
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(28px,4.5vw,84px); align-items:center;
+}
+.guides .body--ink{ color:#e2e2e2; }
+.guides__copy{ margin-top:clamp(22px,3vw,44px); }             /* = .cols rhythm */
+.guides__copy .lede{ margin-bottom:clamp(14px,1.8vw,20px); }
+.guides__copy .asks{ margin-top:clamp(20px,2.6vw,28px); }
+/* the closing line carries lede weight and size — it is the section's landing */
+.guides__kicker{
+  margin:clamp(24px,3vw,34px) 0 0; max-width:46ch;
+  font-size:clamp(1.1rem,1.8vw,1.45rem); line-height:1.36;
+  font-weight:600; color:var(--white);
+}
+.guides__kicker b{ color:var(--gold); font-weight:800; }
+/* A fixed 4:5 frame, centred on the copy, so the crop is the same at every
+   desktop width: the right-hand 795px of the 1600px source, which is the two
+   hosts and the table behind them. The crop anchors bottom-right because that
+   is the corner the hosts sit in. (Stretching the frame to the copy's height
+   instead narrows the crop as the columns shrink, and at ~1000px it slices
+   through the left host's face.) object-fit:cover overrides .slot's contain. */
+.guides__photo{
+  position:relative; aspect-ratio:4 / 5;
+  border-radius:clamp(14px,1.5vw,22px);
+  background:#0b0b0b; box-shadow:0 24px 70px rgba(0,0,0,.58);
+}
+.guides__photo img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:100% 100%;
+}
+/* a soft shade over the top-left (ceiling and far crowd) only; the corner
+   with the hosts is left clean so the eye lands there */
+.guides__photo::after{ background:linear-gradient(200deg, rgba(10,14,17,.30), rgba(10,14,17,0) 55%); }
+/* bottom-left, inside the section's padding band at every desktop width, so
+   the dice never lands on the last line of the kicker */
+.prop--g1{ width:clamp(56px,6vw,104px); bottom:3%; left:1.5%; }
+
+/* ══════════ FAQ ══════════
+   Native <details>/<summary>: the disclosure needs no JS, is keyboard
+   operable, and each summary is a full-width row well over 44px tall.
+   The intro copy takes the lede column and the list takes the body column —
+   the same .cols split every other section uses, so the FAQ sits on the
+   page's grid instead of setting its own. */
+.faq{ background:#000; }
+.faq__inner{ z-index:2; }
+.faq__cols{ grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); align-items:start; }
+.faq__aside{ display:grid; gap:clamp(16px,2vw,24px); align-content:start; }
+.faq__help{ max-width:34ch; }
+.faq__help a{
+  color:var(--white); font-weight:700; white-space:nowrap; text-decoration:underline;
+  text-decoration-color:var(--lime); text-decoration-thickness:2px; text-underline-offset:.22em;
+  transition:color .22s var(--ease);
+}
+.faq__help a:hover{ color:var(--lime); }
+.faq__list{ border-top:1px solid rgba(250,251,253,.14); }
+.qa{ border-bottom:1px solid rgba(250,251,253,.14); }
+.qa__q{
+  display:flex; align-items:flex-start; gap:16px; cursor:pointer;
+  list-style:none; padding:20px 0; min-height:44px;
+  font-family:var(--f-disp); font-weight:600;
+  font-size:clamp(1.05rem,1.35vw,1.25rem); line-height:1.4;
+  color:var(--white); transition:color .22s var(--ease);
+}
+.qa__q::-webkit-details-marker{ display:none; }
+.qa__q:hover{ color:var(--gold); }
+.qa__q:focus-visible{ outline:2px solid var(--lime); outline-offset:4px; }
+/* the number is a fixed column, so every answer starts flush with its question */
+.qa__n{
+  flex:0 0 28px; font-family:var(--f-mono); font-weight:700;
+  font-size:var(--fs-label); letter-spacing:.14em; color:var(--lime);
+  padding-top:.5em;
+}
+.qa__t{ flex:1 1 auto; min-width:0; }
+/* a plus that becomes a minus — no rotation, so the bar cannot end up vertical */
+.qa__i{ flex:0 0 auto; position:relative; width:20px; height:20px; margin-top:.3em; }
+.qa__i::before, .qa__i::after{
+  content:''; position:absolute; left:50%; top:50%;
+  translate:-50% -50%; border-radius:2px; background:var(--gold);
+}
+.qa__i::before{ width:14px; height:2px; }
+.qa__i::after{ width:2px; height:14px; transition:opacity .25s var(--ease); }
+.qa[open] .qa__i::after{ opacity:0; }
+.qa__a{ padding:0 36px 26px 44px; max-width:66ch; }   /* 44 = number column + gap */
+.qa__a p{ margin:0 0 .7em; color:#b7b7b7; font-size:var(--fs-body); line-height:1.55; }  /* = .body */
+.qa__a p:last-child{ margin-bottom:0; }
+.qa__a b{ color:var(--gold); font-weight:800; }
+
+/* ══════════ THANK-YOU PAGE (thank-you.html) ══════════
+   One centred screen built from the event-details components; no script. */
+.ty{ background:#000; overflow:hidden; }
+.ty .wrap{ z-index:2; }
+/* the same note rain as the hero, fainter, masked so it is gone by the time the
+   eye reaches the date and venue */
+.ty__money{
+  position:absolute; z-index:0; pointer-events:none;
+  left:0; top:0; width:100%; height:100%;
+  background:url("images/hero4/money.webp") center top / cover no-repeat;
+  opacity:.11;
+  -webkit-mask-image:linear-gradient(180deg, #fff 0%, rgba(255,255,255,0) 72%);
+          mask-image:linear-gradient(180deg, #fff 0%, rgba(255,255,255,0) 72%);
+}
+.ty__brand{ width:clamp(128px,14vw,172px); height:auto; margin:0 auto clamp(22px,3vw,36px); }
+/* the one display moment on the page: larger than the house .h2 and filled with
+   the hero's ROUNDTABLE gradient (white into gold). The clip box is padded a
+   little so the letters are never shaved at this tight leading. */
+.ty .h2{
+  font-size:clamp(2.7rem, 6.6vw, 5.4rem); line-height:1; letter-spacing:-.03em;
+  padding:.06em 0; margin-bottom:.32em;
+  background-image:linear-gradient(180deg, #FFFFFF 28%, #FBC11F 72%);
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent; -webkit-text-fill-color:transparent;
+}
+.ty .statgrid{ margin-bottom:clamp(26px,3.4vw,38px); }
+/* the time pill is inline-block on the landing page; here it takes its own line so
+   the calendar button never sits beside it */
+.ty .sharp{ display:table; margin:0 auto; }
+.ty .pill--cta{ margin-top:clamp(22px,3vw,36px); }
+.ty__help{ margin-top:clamp(20px,2.6vw,30px); }
+.ty__help a{
+  color:var(--white); font-weight:700; white-space:nowrap; text-decoration:underline;
+  text-decoration-color:var(--lime); text-decoration-thickness:2px; text-underline-offset:.22em;
+  transition:color .22s var(--ease);
+}
+.ty__help a:hover{ color:var(--lime); }
+
 /* ══════════ RESPONSIVE ══════════ */
 @media (max-width:1000px){
+  .takeaway__grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .cols{ grid-template-columns:1fr; gap:20px }
+  /* hosts: one column, in the order heading → photo → copy. The text wrapper
+     dissolves so its children can be ordered around the photo; row gaps are
+     zero and the photo carries its own margins, so the label and heading keep
+     their normal spacing instead of a grid gap between them. */
+  .guides__grid{ grid-template-columns:1fr; gap:0; }
+  .guides__text{ display:contents; }
+  .guides__photo{
+    order:1; aspect-ratio:4 / 3;
+    margin:clamp(10px,2vw,18px) 0 clamp(28px,4vw,40px);
+  }
+  .guides__copy{ order:2; margin-top:0; }
+  /* stacked, the kicker runs to the bottom of the copy, so the dice leaves
+     the bottom-left corner for the padding band above the label */
+  .prop--g1{ top:2%; bottom:auto; left:auto; right:2%; }
   .lede{ max-width:none }
   .film__grid{
     grid-template-columns:minmax(0,1fr) minmax(280px,360px);
@@ -847,9 +1037,11 @@ em{ font-style:italic; }
     top:calc(46.9vw - .45512em);
     font-size:16.65vw; line-height:1.5;
   }
+  /* wider measure and a readable size on a phone: two lines at ~14px in the
+     band between the title and the game box, instead of 11px on three */
   .hero__sub{
-    left:18.5%; right:18.5%; top:62.1vw; padding:0;
-    font-size:2.88vw; line-height:1.2647;
+    left:10%; right:10%; top:61.6vw; padding:0;
+    font-size:clamp(13px,3.7vw,16px); line-height:1.25;
   }
   .hero__break{ display:none; }
   .offer__box{ left:14.325%; top:76.6vw; width:42.478%; height:39.75vw; }
@@ -859,9 +1051,11 @@ em{ font-style:italic; }
     border-radius:.93vw; box-shadow:inset 0 .18vw .18vw rgba(0,0,0,.4);
   }
   .price--two{ top:96vw; }
-  .price__k{ font-size:2.5vw; }
-  .price__v{ font-size:5.4vw; }
-  .price__cta{ border-radius:.9vw; font-size:2.05vw; }
+  /* the pill's label column is widened a touch so "1 PAX" can sit at 3vw
+     (~11.5px) without touching the hairline; the price moves with it */
+  .price__k{ font-size:3vw; left:14%; }
+  .price::after{ left:39.5%; }
+  .price__v{ font-size:5.6vw; left:44.5%; }
   .fig--ivan{ left:1.389%; top:.428%; bottom:auto; width:41.392%; height:auto; }
   .fig--benny{ left:60.647%; right:auto; top:2.717%; bottom:auto; width:35.864%; height:auto; }
   .hero__floor{ top:43%; height:57%; }
@@ -901,7 +1095,7 @@ em{ font-style:italic; }
     margin:clamp(24px,6vw,36px) auto 0;
   }
   .body--lg{
-    font-size:clamp(.95rem,4vw,1.08rem); line-height:1.45;
+    font-size:clamp(1rem,4vw,1.08rem); line-height:1.45;
     opacity:1 !important; translate:none !important;
   }
   .prop--n1{ left:auto; right:-5%; top:18vw; width:20.5%; }
@@ -933,7 +1127,6 @@ em{ font-style:italic; }
   .details__veil{
     background:linear-gradient(180deg,rgba(10,14,17,.84),rgba(10,14,17,.70) 46%,rgba(10,14,17,.92));
   }
-  .details .h2{ font-size:clamp(2rem,10vw,3rem); letter-spacing:-.045em; }
   .details .lede{ font-size:1.05rem; }
   .statgrid{ grid-template-columns:1fr; gap:0; margin-top:32px; }
   .stat{
@@ -944,18 +1137,31 @@ em{ font-style:italic; }
   .stat--entry{
     margin-top:0; padding-top:28px; border-top:0; border-bottom:0;
   }
-  .entry-options{ grid-template-columns:1fr; }
-  .entry-ticket{ min-height:68px; padding:9px 9px 9px 12px; }
-  .entry-ticket__ic{ width:20px; }
-  .entry-ticket__ic--two{ width:25px; }
-  .entry-ticket__pax{ font-size:.94rem; }
-  .stat .entry-ticket__price{ font-size:2rem; }
-  .entry-ticket__cta{ min-width:88px; min-height:40px; font-size:.72rem; }
-  .sharp{ padding:11px 18px; font-size:.95rem; }
+  .entry-form{ margin-top:14px; }
+  .sharp{ padding:11px 18px; font-size:1rem; }
+  .asks,
+  .guides__kicker{ max-width:none; }
+  .asks li{ padding-left:24px; }
+  .takeaway__grid{ grid-template-columns:1fr; }
+  /* the props move into the padding band on a phone: at these section heights
+     their desktop percentages land on the first line of copy or on the CTA */
+  .prop--p1{ top:2%; right:3%; }
+  .prop--p2{ display:none; }
+  .prop--t1{ top:2%; right:1%; width:17%; }
+  .prop--g1{ top:2%; bottom:auto; left:auto; right:1%; width:15%; }
+  .guides__photo{ aspect-ratio:4 / 5; }
+  .faq__cols{ grid-template-columns:1fr; }
+  /* the aside dissolves into the single column so the help line can sit
+     below the list rather than between the heading and the first question */
+  .faq__aside{ display:contents; }
+  .faq__help{ order:1; max-width:none; margin-top:6px; }
+  .qa__q{ padding:16px 0; gap:12px; }
+  .qa__n{ flex-basis:24px; }
+  .qa__a{ padding:0 0 22px 36px; max-width:none; }
   .fineprint{ max-width:36ch; }
   .pill--cta{ width:min(100%,260px); padding:18px 24px; }
   .foot{ padding-top:var(--section-space); padding-bottom:var(--section-space); }
-  .foot__a{ font-size:.82rem; letter-spacing:.11em; }
+  .foot__a{ font-size:.9rem; letter-spacing:.11em; }
 }
 @media (prefers-reduced-motion:reduce){
   *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important }
@@ -974,11 +1180,16 @@ em{ font-style:italic; }
    unsplit version never flashes on first paint */
 [data-split]{ visibility:hidden; }
 [data-split].ready{ visibility:visible; }
-.split{ display:block; }
-.split__line{ display:block; overflow:hidden; padding-bottom:.04em; margin-bottom:-.04em; }
+/* a column flex host, not a block: flex items' margins never collapse, so the
+   padding/negative-margin pair on each line nets to exactly zero and the
+   heading measures n × line-height whatever the mask size */
+.split{ display:flex; flex-direction:column; align-items:stretch; }
+/* the mask reaches .16em below and .08em above the line box, so a Q tail, a
+   comma or a question mark is never shaved at the tight heading line-height */
+.split__line{ display:block; overflow:hidden; padding:.08em 0 .16em; margin:-.08em 0 -.16em; }
 .split__line > span{
   display:block;
-  transform:translateY(112%);
+  transform:translateY(130%);
   transition:transform 1s cubic-bezier(.16,.84,.28,1);
   transition-delay:var(--d, 0s);
   will-change:transform;
@@ -1081,7 +1292,7 @@ html.smooth{ scroll-behavior:auto; }
   /* bottom-left, clear of the game box that sits centre-stage */
   position:absolute; z-index:8; left:var(--pad); bottom:clamp(84px,9vw,132px);
   display:grid; justify-items:start; gap:8px;
-  font-family:var(--f-mono); font-size:.58rem; letter-spacing:.3em;
+  font-family:var(--f-mono); font-size:var(--fs-label); letter-spacing:.3em;
   text-transform:uppercase; color:rgba(255,255,255,.6);
   opacity:clamp(0, calc(1 - var(--p, 0) * 7), 1);
   pointer-events:none;
@@ -1158,6 +1369,8 @@ html.smooth{ scroll-behavior:auto; }
   translate:0 calc((1 - var(--k)) * 30px);
   scale:calc(.97 + var(--k) * .03);
 }
+/* the form cell holds an iframe — no live scale/opacity on it */
+.statgrid .stat--entry{ opacity:1; translate:none; scale:none; }
 
 /* ── 9. the CTA leans toward the pointer ── */
 .pill--cta{

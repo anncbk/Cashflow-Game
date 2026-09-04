@@ -5,13 +5,15 @@ so the page sits at the **root** of the repo, not under `/v4/`. Plain HTML, CSS
 and one JS file — no build step, nothing to install.
 
 ```
-index.html      the page. All copy lives here.
+index.html      the landing page. All copy lives here.
+thank-you.html  the post-submit page (one screen, no script)
 styles.css      palette and type tokens are in :root at the top
 app.js          scroll motion and interactions
 images/         photos, the hero plates, the logos
 Assets/         the eight 3D objects
 robots.txt      keeps crawlers out (see below)
 .nojekyll       stops GitHub Pages running Jekyll over the folder
+GHL-FUNNEL.md   how the two pages become a GoHighLevel funnel (Landing → Thank You)
 ```
 
 Nothing outside this folder is needed. The only external request the page makes

@@ -90,23 +90,22 @@
       <img class="offer__die" src="Assets/cashflow-3d-items-transparent/05-dice-pair.png"
            alt="" aria-hidden="true" data-spin="70">
 
+      <!-- Both tickets are price DISPLAY now, not two competing calls to
+           action: registration and payment for either option happen in the one
+           embedded form at #details, so both pills point there. -->
       <a class="price" style="--i:0"
-         href="https://link.fastpaydirect.com/payment-link/6a8c0fd2f9c8c807930b9b08"
-         target="_blank" rel="noopener noreferrer"
-         aria-label="Register one ticket for 15 dollars">
+         href="#details"
+         aria-label="1 pax, 15 dollars — go to registration">
         <img class="price__ic" src="images/hero4/icon-1pax.svg" alt="" aria-hidden="true">
         <span class="price__k">1 pax</span>
         <b class="price__v">$15</b>
-        <span class="price__cta">Register <i aria-hidden="true">↗</i></span>
       </a>
       <a class="price price--two" style="--i:1"
-         href="https://link.fastpaydirect.com/payment-link/6a8c1243d6768df0544479a5"
-         target="_blank" rel="noopener noreferrer"
-         aria-label="Register two tickets for 25 dollars">
+         href="#details"
+         aria-label="2 pax, 25 dollars — go to registration">
         <img class="price__ic" src="images/hero4/icon-2pax.svg" alt="" aria-hidden="true">
         <span class="price__k">2 pax</span>
         <b class="price__v">$25</b>
-        <span class="price__cta">Register <i aria-hidden="true">↗</i></span>
       </a>
     </div>
 
@@ -138,6 +137,33 @@
   <div class="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
 </section>
 
+<!-- ══ 1b · FIRST FOLD — the premise ══
+     A plain .sec / .wrap section built from the page's own type classes, so it
+     inherits the rise-on-enter and scrub behaviour for free. It deliberately
+     sits BETWEEN the two aspect-locked Figma compositions rather than inside
+     either of them: .hero and .night both position their children as
+     percentages of a fixed frame, so new copy cannot be added to them without
+     moving artwork. -->
+<section class="sec premise" id="why" data-scrub>
+  <img class="prop prop--p1" src="Assets/cashflow-3d-items-transparent/08-card-set.png" alt="" aria-hidden="true" data-depth="24">
+  <img class="prop prop--p2" src="Assets/cashflow-3d-items-transparent/10-chip-stacks.png" alt="" aria-hidden="true" data-depth="-20" data-spin="60">
+
+  <!-- Same skeleton as the showcase intro — label, house-scale .h2, then the
+       two-column lede/body split — so this section sets no type of its own. -->
+  <div class="wrap wrap--center premise__inner">
+    <p class="label">&#9642; Why play</p>
+    <h2 class="h2" data-split>What if you could test years of financial decisions in one evening?</h2>
+    <div class="cols">
+      <p class="lede">Most people know they should build wealth. But real-life money decisions are rarely that simple.</p>
+      <div class="cols__b">
+        <p class="body body--ink">Should you take the opportunity, or hold more cash? Reduce debt, or buy an asset now? Play safe, or take a calculated risk?</p>
+        <p class="body body--ink">At <b class="hi">The Investor&rsquo;s Roundtable</b>, you explore these decisions through play, without risking your actual money.</p>
+      </div>
+    </div>
+    <a class="pill pill--cta" href="#details"><span class="pill__in"><i>Ready to Play?</i><i>Ready to Play?</i></span></a>
+  </div>
+</section>
+
 <!-- ══ 2 · MORE THAN JUST — Figma node 3:39 ══ -->
 <section class="sec night" id="game" data-scrub>
   <img class="prop prop--n1" src="Assets/cashflow-3d-items-transparent/07-money-stacks.png" alt="" aria-hidden="true" data-depth="26">
@@ -164,8 +190,7 @@
     <div class="night__copy">
       <p class="body body--lg" style="--i:0">Created by Robert Kiyosaki, author of Rich Dad Poor Dad, Cashflow is a financial simulation about one goal: <b class="hi">Getting out of the rat race.</b></p>
       <p class="body body--lg" style="--i:1">To get there, you&rsquo;ll manage income, expenses, debt, opportunities, and unexpected life events, just like in real life.</p>
-      <p class="body body--lg" style="--i:2">You&rsquo;ll also see why property, when chosen and managed well, can be one of the most powerful assets in a wealth-building strategy.</p>
-      <p class="body body--lg" style="--i:3">It sounds simple. It&rsquo;s not. But that&rsquo;s what makes the learning so fun.</p>
+      <p class="body body--lg" style="--i:2">You&rsquo;ll also discover why property, when chosen and managed well, can be one of the most powerful assets in a wealth-building strategy.</p>
     </div>
   </div>
 
@@ -188,17 +213,25 @@
   </div>
 </section>
 
-<!-- ══ EDITORIAL PHOTO SHOWCASE ══ -->
-<section class="sec sec--showcase" id="together" data-scrub>
-  <img class="prop prop--v1" src="Assets/cashflow-3d-items-transparent/10-chip-stacks.png" alt="" aria-hidden="true" data-depth="24" data-spin="120">
-  <img class="prop prop--v2" src="Assets/cashflow-3d-items-transparent/06-pawn-set.png" alt="" aria-hidden="true" data-depth="-30">
-  <div class="wrap showcase__intro">
-    <p class="label">&#9642; Learn better</p>
-    <h2 class="h2 h2--ink" data-split>Learn Better,<br>Together.</h2>
+<!-- ══ 2b · WHAT YOU'LL WALK AWAY WITH ══
+     The three "you won't be playing alone" lines open this section instead of
+     sitting in .night__copy. .night is the aspect-locked 1440 × 1515 Figma
+     frame and its copy is absolutely positioned at top:43%; three more
+     paragraphs there would run straight into the ribbon at 83.17%. Here they
+     read as the bridge from the game itself to what it leaves you with. -->
+<section class="sec takeaway" id="takeaways" data-scrub>
+  <img class="prop prop--t1" src="Assets/cashflow-3d-items-transparent/08-card-set.png" alt="" aria-hidden="true" data-depth="22">
+
+  <div class="wrap takeaway__inner">
+    <p class="label">&#9642; Around the table</p>
+    <!-- Doc order, verbatim: the three "playing alone" lines lead, and the
+         WHAT YOU'LL WALK AWAY WITH heading follows them, introducing the four
+         cards. Only the type scale is the house one — the sequence is the doc's. -->
     <div class="cols">
-      <p class="lede lede--ink">Bring your partner, friend, sibling, or colleague along.</p>
+      <p class="lede">But you won&rsquo;t be playing alone.</p>
       <div class="cols__b">
-        <p class="body body--ink">It&rsquo;s a fun way to experience how money decisions work, compare choices, and see how investors think through risk, income, assets, and opportunities.</p>
+        <p class="body body--ink">You&rsquo;ll be making deals, negotiating, comparing decisions and watching how other investors respond to the same opportunities you face.</p>
+        <p class="body body--ink">Sometimes, you learn just as much from the person across the table as you do from the game itself.</p>
       </div>
     </div>
   </div>
@@ -328,6 +361,90 @@
     </div>
   </div>
 
+  <!-- data-static: the harness would otherwise fade this block in on entry,
+       and the four cards are wanted visible at all times — no reveal. -->
+  <div class="wrap" data-static>
+    <h2 class="h2" data-split>What You&rsquo;ll<br>Walk Away With</h2>
+    <div class="takeaway__grid">
+      <article class="tak" style="--i:0">
+        <span class="tak__n">01</span>
+        <h3 class="tak__h">Sharper Money Instincts</h3>
+        <p class="tak__p">Recognise how you respond to risk, opportunity and financial pressure.</p>
+      </article>
+      <article class="tak" style="--i:1">
+        <span class="tak__n">02</span>
+        <h3 class="tak__h">Stronger Financial Thinking</h3>
+        <p class="tak__p">Understand how income, debt, assets and cash flow affect the choices you make.</p>
+      </article>
+      <article class="tak" style="--i:2">
+        <span class="tak__n">03</span>
+        <h3 class="tak__h">Real-Life Perspective</h3>
+        <p class="tak__p">Connect what happens in the game to actual investing situations.</p>
+      </article>
+      <article class="tak" style="--i:3">
+        <span class="tak__n">04</span>
+        <h3 class="tak__h">Investor Conversations</h3>
+        <p class="tak__p">Exchange ideas, negotiate and gain different perspectives from the people around your table.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 3 · THIRD FOLD — guided by experienced investors ══
+     Copy on the left, the room on the right. The photo used to be a full-bleed
+     backdrop under the copy; it is now a card beside it, cropped from its
+     bottom-right corner so Ivan and Benny — the two with headsets — stay in
+     frame at every column width. The crowd behind them is what gets cut. -->
+<section class="sec guides" id="hosts" data-scrub>
+  <img class="prop prop--g1" src="Assets/cashflow-3d-items-transparent/05-dice-pair.png" alt="" aria-hidden="true" data-depth="-24" data-spin="-80">
+
+  <div class="wrap guides__inner">
+    <div class="guides__grid">
+      <div class="guides__text">
+        <p class="label">&#9642; Your hosts</p>
+        <h2 class="h2" data-split>Guided By<br>Experienced Investors</h2>
+        <div class="guides__copy">
+          <p class="lede">Ivan and Benny won&rsquo;t simply be facilitating the game.</p>
+          <p class="body body--ink">They bring years of first-hand investing experience, having built and managed their own wealth through different market cycles and financial decisions.</p>
+          <p class="body body--ink">Throughout the game, they&rsquo;ll help connect what happens around the Cashflow table to real-life investing.</p>
+
+          <ul class="asks asks--gold">
+            <li>Why did one choice work?</li>
+            <li>Where did the risk come from?</li>
+            <li>What would this look like with real money?</li>
+          </ul>
+
+          <p class="guides__kicker">Play the game. Understand the thinking behind it. <b>Apply the lessons beyond the table.</b></p>
+        </div>
+      </div>
+
+      <!-- Swap the file at images/16-hosts-bg.jpg to change the photo; nothing
+           else references it. Keep the hosts in the bottom-right of the source:
+           that is the corner the CSS crop anchors to. -->
+      <figure class="slot guides__photo">
+        <img src="images/16-hosts-bg.jpg"
+             alt="Ivan and Benny, headsets on, in front of the Cashflow community at the end of a game night."
+             loading="lazy" decoding="async">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EDITORIAL PHOTO SHOWCASE ══ -->
+<section class="sec sec--showcase" id="together" data-scrub>
+  <img class="prop prop--v1" src="Assets/cashflow-3d-items-transparent/10-chip-stacks.png" alt="" aria-hidden="true" data-depth="24" data-spin="120">
+  <img class="prop prop--v2" src="Assets/cashflow-3d-items-transparent/06-pawn-set.png" alt="" aria-hidden="true" data-depth="-30">
+  <div class="wrap wrap--center showcase__intro">
+    <p class="label">&#9642; Learn better</p>
+    <h2 class="h2 h2--ink" data-split>Learn Better,<br>Together.</h2>
+    <div class="cols">
+      <p class="lede lede--ink">Bring your partner, friend, sibling, or colleague along.</p>
+      <div class="cols__b">
+        <p class="body body--ink">It&rsquo;s a fun way to experience how money decisions work, compare choices, and understand how investors approach risk, income, assets, and opportunities.</p>
+      </div>
+    </div>
+  </div>
+
   <figure class="wrap showcase__group">
     <img src="images/13-details-bg.jpg"
          alt="The Cashflow community learning and playing together in a bright room."
@@ -370,6 +487,61 @@
   </div>
 </section>
 
+<!-- ══ FAQ ══
+     Native <details>/<summary>, so the disclosure works with no JS, is
+     keyboard-operable, and each summary is a full-width ≥ 44px tap target.
+     The first one is open so the block never reads as an empty list.
+     Layout is the page's own .cols split: intro copy and the WhatsApp line in
+     the lede column, the list in the body column. -->
+<section class="sec faq" id="faq">
+  <div class="wrap faq__inner">
+    <p class="label">&#9642; Good to know</p>
+    <h2 class="h2" data-split>Frequently Asked Questions</h2>
+
+    <div class="cols faq__cols">
+      <div class="faq__aside">
+        <p class="lede">Everything you need to know before you take a seat at the table.</p>
+        <p class="body body--ink faq__help">Need help with registration or payment? WhatsApp us at <a href="https://wa.me/6588535734" rel="noopener">+65 8853 5734</a>.</p>
+      </div>
+
+      <div class="faq__list">
+        <details class="qa" open>
+          <summary class="qa__q"><span class="qa__n">01</span><span class="qa__t">What is the Investor Round Table (Cashflow Game) session about?</span><i class="qa__i" aria-hidden="true"></i></summary>
+          <div class="qa__a">
+            <p>This is more than just playing a board game.</p>
+            <p>Throughout the session, Ivan and Benny will guide the gameplay, break down key decisions, and connect what happens in the game to real-life cashflow, investing and wealth-building situations.</p>
+            <p>The goal is not simply to win &mdash; it&rsquo;s to understand how cash flow works and apply it to real life.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary class="qa__q"><span class="qa__n">02</span><span class="qa__t">Do I need investment experience to join?</span><i class="qa__i" aria-hidden="true"></i></summary>
+          <div class="qa__a">
+            <p>No. The session is suitable for both beginners and experienced investors.</p>
+            <p>You&rsquo;ll explore practical concepts such as cashflow, assets, liabilities, leverage, risk and opportunity in an interactive and easy-to-understand environment.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary class="qa__q"><span class="qa__n">03</span><span class="qa__t">Will I get to interact with other investors?</span><i class="qa__i" aria-hidden="true"></i></summary>
+          <div class="qa__a">
+            <p>Yes. That&rsquo;s part of the Investor Round Table experience.</p>
+            <p>You&rsquo;ll play, discuss, negotiate and make decisions together with other participants &mdash; learning not only from Ivan and Benny, but also from the different perspectives around your table.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary class="qa__q"><span class="qa__n">04</span><span class="qa__t">How much is the commitment fee?</span><i class="qa__i" aria-hidden="true"></i></summary>
+          <div class="qa__a">
+            <p>The commitment fee is <b>$15</b> for 1 pax and <b>$25</b> for 2 pax. If you&rsquo;re bringing a plus one, please register and make payment for your partner as well.</p>
+            <p>The fee helps us secure your seat and prepare the session accordingly. All payments are non-refundable. Light refreshments will be provided.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ EVENT DETAILS ══ -->
 <section class="sec details" id="details" data-scrub="in">
   <figure class="slot details__bg" data-slot="13-details-bg"><img src="images/13-details-bg.jpg" alt="The full room, tables and players."></figure>
@@ -383,32 +555,37 @@
     <p class="lede">Reserve your seat at the table.</p>
 
     <div class="statgrid">
-      <div class="stat" style="--i:0"><span class="stat__k">Date</span><b>13 October 2026</b><i>(Tuesday)</i></div>
+      <div class="stat" style="--i:0"><span class="stat__k">Date</span><b>11 September 2026</b><i>(Friday)</i></div>
       <div class="stat" style="--i:1"><span class="stat__k">Time</span><b>7:30 PM &ndash; 10:30 PM</b><i>Registration starts at 7:00 PM</i></div>
       <div class="stat" style="--i:2"><span class="stat__k">Where</span><b>Suntec City Convention Centre</b><i>Level 3, Room 320</i></div>
       <div class="stat stat--entry" style="--i:3">
         <span class="stat__k">Entry</span>
-        <div class="entry-options">
-          <a class="entry-ticket"
-             href="https://link.fastpaydirect.com/payment-link/6a8c0fd2f9c8c807930b9b08"
-             target="_blank" rel="noopener noreferrer"
-             aria-label="Register one ticket for 15 dollars">
-            <img class="entry-ticket__ic" src="images/hero4/icon-1pax.svg" alt="" aria-hidden="true">
-            <span class="entry-ticket__pax">1 pax</span>
-            <strong class="entry-ticket__price">$15</strong>
-            <span class="entry-ticket__cta">Register <span aria-hidden="true">↗</span></span>
-          </a>
-          <a class="entry-ticket"
-             href="https://link.fastpaydirect.com/payment-link/6a8c1243d6768df0544479a5"
-             target="_blank" rel="noopener noreferrer"
-             aria-label="Register two tickets for 25 dollars">
-            <img class="entry-ticket__ic entry-ticket__ic--two" src="images/hero4/icon-2pax.svg" alt="" aria-hidden="true">
-            <span class="entry-ticket__pax">2 pax</span>
-            <strong class="entry-ticket__price">$25</strong>
-            <span class="entry-ticket__cta">Register <span aria-hidden="true">↗</span></span>
-          </a>
-        </div>
+        <b>$15 &middot; 1 pax &nbsp; &nbsp; $25 &middot; 2 pax</b>
         <i class="entry-note">Light refreshments provided</i>
+        <!-- Registering and paying both happen inside this form now, so the two
+             fastpaydirect links that used to sit here are gone. GHL's
+             form_embed.js (end of <body>) listens for the form's own postMessage
+             and writes an explicit px height onto the iframe; the inline height
+             is only what shows if that script never loads, so it is the form's
+             full data-height rather than a guess. -->
+        <div class="entry-form">
+          <iframe
+            src="https://api.leadconnectorhq.com/widget/form/w7kI51nYMyGytQtdXI7y"
+            style="width:100%;height:1118px;border:none;border-radius:8px"
+            id="inline-w7kI51nYMyGytQtdXI7y"
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="Investor&rsquo;s Roundtable Sep 2026"
+            data-height="1118"
+            data-layout-iframe-id="inline-w7kI51nYMyGytQtdXI7y"
+            data-form-id="w7kI51nYMyGytQtdXI7y"
+            title="Investor&rsquo;s Roundtable Sep 2026"></iframe>
+        </div>
       </div>
     </div>
 
@@ -417,11 +594,13 @@
   </div>
 </section>
 
+
 <footer class="foot">
   <p class="foot__a">For Investors, By Investors</p>
   <p class="foot__b">&copy; 2026 The Investor&rsquo;s Roundtable</p>
 </footer>
 
+<script src="https://link.msgsndr.com/js/form_embed.js"></script>
 <script src="app.js?v=20260825-native-scroll"></script>
 </body>
 </html>

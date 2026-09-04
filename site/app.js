@@ -317,9 +317,10 @@
     el.classList.add('ready');
   });
 
-  /* ══ 6d. THE CTA LEANS TOWARD THE POINTER ══════════════════ */
-  var mag = $('.pill--cta');
-  if (mag && !reduced && !coarse) {
+  /* ══ 6d. THE CTA LEANS TOWARD THE POINTER ══════════════════
+     Selected as a list: the page now carries more than one "Ready to Play?"
+     button, and the single-element lookup only ever wired the first. */
+  if (!reduced && !coarse) $$('.pill--cta').forEach(function (mag) {
     mag.addEventListener('pointermove', function (e) {
       var r = mag.getBoundingClientRect();
       mag.style.setProperty('--magx', (((e.clientX - r.left) / r.width - .5) * 16).toFixed(1) + 'px');
@@ -329,7 +330,7 @@
       mag.style.setProperty('--magx', '0px');
       mag.style.setProperty('--magy', '0px');
     });
-  }
+  });
 
   /* ══ 7. ONE rAF LOOP ═══════════════════════════════════════ */
   function frame() {
@@ -385,8 +386,8 @@
     if (Sfx.on) Sfx.dice();
   });
 
-  /* ══ 9. COUNTDOWN to 13 Oct 2026, 19:30 SGT ════════════════ */
-  var TARGET = new Date('2026-10-13T19:30:00+08:00').getTime();
+  /* ══ 9. COUNTDOWN to 11 Sep 2026, 19:30 SGT ════════════════ */
+  var TARGET = new Date('2026-09-11T19:30:00+08:00').getTime();
   var cd = $('#countdown');
   function tickCountdown() {
     if (!cd) return;
@@ -422,10 +423,14 @@
     });
   });
 
-  /* ══ 11. CTA ═══════════════════════════════════════════════ */
-  var cta = $('#cta');
-  if (cta) cta.addEventListener('click', function (e) {
-    if (cta.getAttribute('href') === '#') { e.preventDefault(); Sfx.dice(); }
+  /* ══ 11. CTA ═══════════════════════════════════════════════
+     Every "Ready to Play?" rolls the dice on the way to the form; only a
+     placeholder href="#" swallows the click. */
+  $$('.pill--cta').forEach(function (cta) {
+    cta.addEventListener('click', function (e) {
+      Sfx.dice();
+      if (cta.getAttribute('href') === '#') e.preventDefault();
+    });
   });
 
   /* ══ 12. FONT CHECK ════════════════════════════════════════ */
